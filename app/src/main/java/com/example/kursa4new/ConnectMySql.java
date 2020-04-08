@@ -1,17 +1,12 @@
 package com.example.kursa4new;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 class ConnectMySql {
 
