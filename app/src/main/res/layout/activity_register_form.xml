@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".ActivityRegisterForm">
+
+
+    <EditText
+        android:id="@+id/loginPlainTextId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Логин"
+        android:inputType="textPersonName" />
+
+
+    <EditText
+        android:id="@+id/emailPlainTextId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e-mail"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/passwordPlainTextId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Пароль"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/confirmPasswordPlainTextId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Повторите пароль"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/registerButtonId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="registerButtonClick"
+        android:text="Зарегистрироваться"
+        android:textAllCaps="false" />
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/logimTextViewId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="registerTextViewClick"
+            android:text="@string/login"
+            android:textAllCaps="false"
+            android:textColor="@color/design_default_color_secondary_variant"
+
+            android:textStyle="italic" />
+    </LinearLayout>
+
+</LinearLayout>

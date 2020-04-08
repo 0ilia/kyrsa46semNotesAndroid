@@ -44,16 +44,20 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        >
 
-        <Button
-            android:onClick="registerButtonClick"
-            android:id="@+id/registerButtonId"
+        <TextView
+            android:onClick="registerTextViewClick"
+            android:id="@+id/registerTextViewId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Зарегистрироваться"
+            android:text="@string/registration"
             android:textAllCaps="false"
-            android:layout_marginLeft="10dp"
+            android:textColor="@color/design_default_color_secondary_variant"
+
+            android:textStyle="italic"
         />
     </LinearLayout>
 
