@@ -2,22 +2,34 @@ package com.example.kursa4new;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 public class ActivityRegisterForm extends AppCompatActivity {
 
-    TextView reg;
-    EditText login, password;
-    Button auth;
+    EditText login, password,email,confirmPass;
+
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putString("fieldLogin",login.getText().toString());
+        savedInstanceState.putString("fieldPassword",login.getText().toString());
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +41,13 @@ public class ActivityRegisterForm extends AppCompatActivity {
 
 
 
-        login = findViewById(R.id.loginPlainTextId);
-        password = findViewById(R.id.passwordPlainTextId);
+        login = findViewById(R.id.loginPlainTextId_reg);
+        email = findViewById(R.id.emailPlainTextId_reg);
+        password = findViewById(R.id.passwordPlainTextId_reg);
+        confirmPass = findViewById(R.id.confirmPasswordPlainTextId_reg);
         password.setTransformationMethod(new LockerPasswordTransformationMethod());
+        confirmPass.setTransformationMethod(new LockerPasswordTransformationMethod());
 
-        reg = findViewById(R.id.registerButtonId);
-        auth = findViewById(R.id.loginButtonId);
 
         login.addTextChangedListener(new TextWatcher() {
 
@@ -79,17 +92,16 @@ public class ActivityRegisterForm extends AppCompatActivity {
     }
 
 
-    public void registerTextViewClick(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 
-    public void registerButtonClick(View view) {
+
+    public void registerButtonClick_reg(View view) {
 
         if (login.getText().toString().length() > 3) {
             login.setError(null);
             if (password.getText().toString().length() > 4) {
                 password.setError(null);
+
+
 
                 //Проверка  есть ли пользователь в системе
 
@@ -97,20 +109,42 @@ public class ActivityRegisterForm extends AppCompatActivity {
                 String passwordhash = BCrypt.hashpw(password.getText().toString(), BCrypt.gensalt(4));
 
                 //  if ((BCrypt.checkpw(keyChat.getText().toString(), keyValue/*хеш*/))  проверка на соотаветствие
-                ConnectMySql connectMySql = new ConnectMySql();
-
-                connectMySql.findOneeUser = "SELECT login  FROM  " + connectMySql.tablenameUsers + " WHERE "
-                        + connectMySql.login + " = '" + login.getText().toString() + "';";
-
-                connectMySql.stringInserAddUsers = "INSERT INTO " + connectMySql.tablenameUsers + "" +
-                        " (" + connectMySql.login + "," + connectMySql.password + ")" +
-                        " VALUES ('" + login.getText().toString() + "','" + passwordhash + "');";
+                ConnectMySqlRegistration connectMySqlRegistration = new ConnectMySqlRegistration();
 
 
-                if (connectMySql.countUser == 1) {//если логин уже есть
 
+
+
+                StringDataMysql stringDataMysql = new  StringDataMysql();
+
+                connectMySqlRegistration.findOneeUser = "SELECT login  FROM  " + stringDataMysql.tablenameUsers + " WHERE "
+                        + stringDataMysql.login + " = '" + login.getText().toString() + "';";
+
+
+
+
+                if (connectMySqlRegistration.countUser == 1) {//если логин уже есть
                     login.setError("Логин уже существует");
+
+
+
+                }else {
+
+
+                    connectMySqlRegistration.stringInserAddUsers = "INSERT INTO " + stringDataMysql.tablenameUsers + "" +
+                            " (" + stringDataMysql.login + "," + stringDataMysql.password + ")" +
+                            " VALUES ('" + login.getText().toString() + "','" + passwordhash + "');";
                 }
+
+                /*try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }*/
+
+
+
+
             } else {
                 password.setError("Пароль должен содержать минимум 5 символов");
 
@@ -119,4 +153,10 @@ public class ActivityRegisterForm extends AppCompatActivity {
             login.setError("Логин должен содержать минимум 4 символа");
         }
     }
+
+    public void loginTextViewClick_reg(View view) {
+        super.onBackPressed();
+    }
+
+
 }

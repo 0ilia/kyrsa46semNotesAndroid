@@ -11,7 +11,7 @@
 
 
     <EditText
-        android:id="@+id/loginPlainTextId"
+        android:id="@+id/loginPlainTextId_auth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -24,7 +24,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/passwordPlainTextId"
+            android:id="@+id/passwordPlainTextId_auth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -32,10 +32,10 @@
             android:inputType="textPersonName" />
 
         <Button
-            android:id="@+id/loginButtonId"
+            android:id="@+id/loginButtonId_auth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="loginButtonClick"
+            android:onClick="loginButtonClick_auth"
             android:text="Войти"
             android:textAllCaps="false" />
     </LinearLayout>
@@ -49,8 +49,8 @@
         >
 
         <TextView
-            android:onClick="registerTextViewClick"
-            android:id="@+id/registerTextViewId"
+            android:onClick="registerTextViewClick_auth"
+            android:id="@+id/registerTextViewId_auth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/registration"

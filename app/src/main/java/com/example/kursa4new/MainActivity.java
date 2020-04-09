@@ -14,9 +14,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class MainActivity extends AppCompatActivity {
-    TextView reg;
     EditText login, password;
-    Button  auth;
+
+ /*   @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putString("fieldLogin",login.getText().toString());
+        savedInstanceState.putString("fieldPassword",password.getText().toString());
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        login.setText( savedInstanceState.getString("fieldLogin"));
+        password.setText( savedInstanceState.getString("fieldPassword"));
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
         // getSupportActionBar().hide();  скрыть actionbar;
 
-        login = findViewById(R.id.loginPlainTextId);
-        password = findViewById(R.id.passwordPlainTextId);
-        password.setTransformationMethod(new LockerPasswordTransformationMethod());
 
-        reg = findViewById(R.id.registerButtonId);
-        auth = findViewById(R.id.loginButtonId);
+        login = findViewById(R.id.loginPlainTextId_auth);
+        password = findViewById(R.id.passwordPlainTextId_auth);
+        password.setTransformationMethod(new LockerPasswordTransformationMethod());//звёздочки
+
 
         login.addTextChangedListener(new TextWatcher() {
 
@@ -73,15 +86,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void loginButtonClick(View view) {
+    public void loginButtonClick_auth(View view) {
 
+        if (login.getText().toString().length() > 3) {
+            login.setError(null);
+            if (password.getText().toString().length() > 4) {
+                password.setError(null);
+
+                //авторизация
+
+            } else {
+                password.setError("Пароль должен содержать минимум 5 символов");
+
+            }
+        } else {
+            login.setError("Логин должен содержать минимум 4 символа");
+        }
     }
 
-    public void registerTextViewClick(View view) {
 
+
+    public void registerTextViewClick_auth(View view) {
         Intent intent = new Intent(this, ActivityRegisterForm.class);
         startActivity(intent);
-
-
     }
 }

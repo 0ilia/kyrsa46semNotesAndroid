@@ -8,21 +8,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-class ConnectMySql {
+class ConnectMySqlRegistration {
 
 
-    public String url = "jdbc:mysql://10.0.2.2:3306/notes";
-    public String user = "root";
-    public String passwd = "";
+    StringDataMysql stringDataMysql = new StringDataMysql();
 
 
-    String login = "login";
-    String id = "id";
-    String password = "password";
-    String tablenameUsers = "users";
-    String stringInserAddUsers;
     String findOneeUser;
-    int countUser;
+    String stringInserAddUsers;
+    int countUser = 0;
 
 
     MyTask myTask = (MyTask) new MyTask().execute();
@@ -34,17 +28,19 @@ class ConnectMySql {
 
             try {
                 //  Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection(url, user, passwd);
+                Connection conn = DriverManager.getConnection(stringDataMysql.url, stringDataMysql.user, stringDataMysql.passwd);
 
                 Statement st = conn.createStatement();
 
-                String myTableName = "CREATE TABLE IF NOT EXISTS " + tablenameUsers + " (" +
-                        id + " INT  PRIMARY KEY AUTO_INCREMENT," +
-                        login + " VARCHAR(15) NOT NULL  ," +
-                        password + "  VARCHAR(63) NOT NULL );";
+                String myTableName = "CREATE TABLE IF NOT EXISTS " + stringDataMysql.tablenameUsers + "(" +
+                        stringDataMysql.id + " INT  PRIMARY KEY AUTO_INCREMENT," +
+                        stringDataMysql.login + " VARCHAR(15) NOT NULL  ," +
+                        stringDataMysql.password + "  VARCHAR(60) NOT NULL );";
                 st.executeUpdate(myTableName);
+
+
+                //проверка на логин
                 ResultSet rs = st.executeQuery(findOneeUser);
-                countUser = 0;
                 while (rs.next()) {
                     countUser = 1;
                     break;
@@ -61,8 +57,9 @@ class ConnectMySql {
             return null;
         }
 
-
     }
+
+
 
 }
 
