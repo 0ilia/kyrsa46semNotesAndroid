@@ -11,34 +11,21 @@ import android.widget.Toast;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.util.regex.Pattern;
+
 public class ActivityRegisterForm extends AppCompatActivity {
 
-    EditText login, password,email,confirmPass;
+    EditText login, password, email, confirmPass;
 
-
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        savedInstanceState.putString("fieldLogin",login.getText().toString());
-        savedInstanceState.putString("fieldPassword",login.getText().toString());
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-    }
+    String regex;
+    boolean emailBool = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_form);
 
-
-
-
+        regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 
 
         login = findViewById(R.id.loginPlainTextId_reg);
@@ -57,6 +44,35 @@ public class ActivityRegisterForm extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (login.getText().toString().length() <= 3) {
+                    login.setError("Логин должен содержать минимум 4 символа");
+                } else {
+                    login.setError(null);
+                }
+            }
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                emailBool = Pattern.matches(regex, email.getText().toString());
+
+                if (!emailBool) {
+                    email.setError("Не валидный email");
+                } else {
+                    email.setError(null);
+                }
+
             }
 
             @Override
@@ -92,49 +108,42 @@ public class ActivityRegisterForm extends AppCompatActivity {
     }
 
 
-
-
     public void registerButtonClick_reg(View view) {
 
         if (login.getText().toString().length() > 3) {
             login.setError(null);
-            if (password.getText().toString().length() > 4) {
-                password.setError(null);
+            if (emailBool) {
+                email.setError(null);
+                if (password.getText().toString().length() > 4) {
+                    password.setError(null);
 
 
+                    //Проверка  есть ли пользователь в системе
 
-                //Проверка  есть ли пользователь в системе
+                    ///add user + hash password
+                    String passwordhash = BCrypt.hashpw(password.getText().toString(), BCrypt.gensalt(4));
 
-                ///add user + hash password
-                String passwordhash = BCrypt.hashpw(password.getText().toString(), BCrypt.gensalt(4));
-
-                //  if ((BCrypt.checkpw(keyChat.getText().toString(), keyValue/*хеш*/))  проверка на соотаветствие
-                ConnectMySqlRegistration connectMySqlRegistration = new ConnectMySqlRegistration();
-
+                    //  if ((BCrypt.checkpw(keyChat.getText().toString(), keyValue/*хеш*/))  проверка на соотаветствие
+                    ConnectMySqlRegistration connectMySqlRegistration = new ConnectMySqlRegistration();
 
 
+                    StringDataMysql stringDataMysql = new StringDataMysql();
+
+                    connectMySqlRegistration.findOneeUser = "SELECT login  FROM  " + stringDataMysql.tablenameUsers + " WHERE "
+                            + stringDataMysql.login + " = '" + login.getText().toString() + "';";
 
 
-                StringDataMysql stringDataMysql = new  StringDataMysql();
-
-                connectMySqlRegistration.findOneeUser = "SELECT login  FROM  " + stringDataMysql.tablenameUsers + " WHERE "
-                        + stringDataMysql.login + " = '" + login.getText().toString() + "';";
+                    if (connectMySqlRegistration.countUser == 1) {//если логин уже есть
+                        login.setError("Логин уже существует");
 
 
+                    } else {
 
 
-                if (connectMySqlRegistration.countUser == 1) {//если логин уже есть
-                    login.setError("Логин уже существует");
-
-
-
-                }else {
-
-
-                    connectMySqlRegistration.stringInserAddUsers = "INSERT INTO " + stringDataMysql.tablenameUsers + "" +
-                            " (" + stringDataMysql.login + "," + stringDataMysql.password + ")" +
-                            " VALUES ('" + login.getText().toString() + "','" + passwordhash + "');";
-                }
+                        connectMySqlRegistration.stringInserAddUsers = "INSERT INTO " + stringDataMysql.tablenameUsers + "" +
+                                " (" + stringDataMysql.login + "," + stringDataMysql.password + ")" +
+                                " VALUES ('" + login.getText().toString() + "','" + passwordhash + "');";
+                    }
 
                 /*try {
                     Thread.sleep(1000);
@@ -142,12 +151,11 @@ public class ActivityRegisterForm extends AppCompatActivity {
                     e.printStackTrace();
                 }*/
 
-
-
-
+                } else {
+                    password.setError("Пароль должен содержать минимум 5 символов");
+                }
             } else {
-                password.setError("Пароль должен содержать минимум 5 символов");
-
+                email.setError("Не валидный email");
             }
         } else {
             login.setError("Логин должен содержать минимум 4 символа");
