@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Логин"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:maxLength="15" />
 
 
     <EditText
@@ -52,17 +53,18 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:orientation="horizontal">
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+
 
         <TextView
-            android:id="@+id/logimTextViewId_reg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="loginTextViewClick_reg"
-            android:text="@string/login"
+            android:id="@+id/errorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=""
             android:textAllCaps="false"
-            android:textColor="@color/design_default_color_secondary_variant"
+            android:textColor="@color/red"
 
             android:textStyle="italic" />
     </LinearLayout>
