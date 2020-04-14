@@ -1,12 +1,14 @@
 package com.example.kursa4new;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,6 +51,10 @@ import static com.android.volley.Request.Method.POST;
 public class MainActivity extends AppCompatActivity {
     EditText login, password;
 
+    TextView errorMessage;
+    String messageError ="";
+    boolean register = false;
+    SharedPreferences sPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,119 +64,76 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        errorMessage = findViewById(R.id.errorMessageLoginForm);
+
         login = findViewById(R.id.loginPlainTextId_auth);
         password = findViewById(R.id.passwordPlainTextId_auth);
         password.setTransformationMethod(new LockerPasswordTransformationMethod());//звёздочки
 
 
-        login.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (login.getText().toString().length() <= 3) {
-                    login.setError("Логин должен содержать минимум 4 символа");
-                } else {
-                    login.setError(null);
-                }
-            }
-        });
-
-        password.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (password.getText().toString().length() <= 4) {
-                    password.setError("Пароль должен содержать минимум 5 символов");
-                } else {
-                    password.setError(null);
-                }
-            }
-        });
     }
 
     public void loginButtonClick_auth(View view) {
 
-        if (login.getText().toString().length() > 3) {
-            login.setError(null);
-            if (password.getText().toString().length() > 4) {
-                password.setError(null);
 
-
-                //Проверка  есть ли пользователь в системе
-
-                ///add user + hash password
-                String passwordhash = BCrypt.hashpw(password.getText().toString(), BCrypt.gensalt());
-
-                //  if ((BCrypt.checkpw(keyChat.getText().toString(), keyValue/*хеш*/))  проверка на соотаветствие
-                ConnectMySqlAuth connectMySqlAuth = new ConnectMySqlAuth();
-
-
-                StringDataMysql stringDataMysql = new StringDataMysql();
-
-                connectMySqlAuth.findUser = "SELECT " + stringDataMysql.login + " , " + stringDataMysql.password + " FROM  " + stringDataMysql.tablenameUsers + " WHERE "
-                        + stringDataMysql.login + " = '" + login.getText().toString() + "';";
-
-               /* try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }*/
-                for (int i = 0; i < Integer.MAX_VALUE; i++) {
-                    if (!connectMySqlAuth.passHash.equals("")) {
-                        break;
-                    }
-                }
-                if (!connectMySqlAuth.name.equals("") || !connectMySqlAuth.passHash.equals("")) {
-                    if ((BCrypt.checkpw(password.getText().toString(), connectMySqlAuth.passHash))) {
-//Входим
-                        Intent intent = new Intent(this, MyNotes.class);
-                        startActivity(intent);
-//Сохранить в SharePre
-                    } else {
-                        password.setError("Логин или пароль неверный");
-                        login.setError("Логин или пароль неверный");
-                    }
-                } else {
-                    password.setError("Логин или пароль неверный");
-                    login.setError("Логин или пароль неверный");
-                }
-/*
-                if (connectMySqlRegistration.countUser == 1) {//если логин уже есть
-                    login.setError("Логин уже существует");
-                } else {
-                    connectMySqlRegistration.stringInserAddUsers = "INSERT INTO " + stringDataMysql.tablenameUsers + "" +
-                            " (" + stringDataMysql.login + "," + stringDataMysql.email + "," + stringDataMysql.password + ")" +
-                            " VALUES ('" + login.getText().toString() + "','" + email.getText().toString() + "','" + passwordhash + "');";
-                }
-                */
-
-            } else {
-                password.setError("Пароль должен содержать минимум 5 символов");
-
-            }
-        } else {
-            login.setError("Логин должен содержать минимум 4 символа");
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JSONObject object = new JSONObject();
+        try {
+            //input your API parameters
+            object.put("login",login.getText().toString());
+            object.put( "password",password.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        // Enter the correct url for your api service site
+        String url = "http://10.0.2.2:3005/loginUser/";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("CCCC",response.toString());
+                        try {
+
+                            messageError = response.getString("messageError");
+                            register = response.getBoolean("register");
+
+                            errorMessage.setText(messageError);
+
+                            openMyNotes(register ,login.getText().toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+
     }
+public  void openMyNotes(boolean register,String login){
+     if(register){
+
+
+
+
+         Intent intent = new Intent(this, MyNotes.class);
+         startActivity(intent);
+     }
+}
 
 
     public void registerTextViewClick_auth(View view) {
+
+
+
+
         Intent intent = new Intent(this, ActivityRegisterForm.class);
         startActivity(intent);
     }

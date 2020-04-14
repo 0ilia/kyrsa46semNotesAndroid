@@ -58,7 +58,29 @@
             android:textColor="@color/design_default_color_secondary_variant"
 
             android:textStyle="italic"
+
         />
+    </LinearLayout>
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        >
+
+        <TextView
+            android:onClick="registerTextViewClick_auth"
+            android:id="@+id/errorMessageLoginForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAllCaps="false"
+            android:textColor="@color/red"
+
+            android:textStyle="italic"
+
+            />
     </LinearLayout>
 
 </LinearLayout>
