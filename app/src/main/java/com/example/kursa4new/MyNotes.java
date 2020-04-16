@@ -12,6 +12,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,11 +39,16 @@ public class MyNotes extends AppCompatActivity {
     String login, json = "";
     String theme, message;
     List<Note> notes = new ArrayList<>();
-
+    RecyclerView recyclerView;
+    RecyclerViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_notes);
+
+
+        recyclerView   = (RecyclerView) findViewById(R.id.RecyclerViewId);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         Intent intent = getIntent();
 
@@ -68,6 +74,7 @@ public class MyNotes extends AppCompatActivity {
                                 theme = jsonObject.getString("theme"); //gets category String
                                 message = jsonObject.getString("message"); //gets category String
                                 notes.add(new Note(theme, message));
+                                setAdapter();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -85,25 +92,42 @@ public class MyNotes extends AppCompatActivity {
 
 
         //  setInitialData();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewId);
-        // создаем адаптер
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, notes);
-        // устанавливаем для списка адаптер
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setAdapter(adapter);
+
     }
 
-    private void setInitialData() {
 
-        notes.add(new Note("EliteEliteEliteEliteEliteElite z3", "HEliteEliteEliteEliteEliteEliteEliteEliteEliteEliteP"));
-        notes.add(new Note("Galaxy S8", "Samsung"));
-        notes.add(new Note("LG G 5", "LG"));
+    private void setAdapter() {
+
+        // создаем адаптер
+         adapter = new RecyclerViewAdapter(this, notes);
+        // устанавливаем для списка адаптер
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_page_mynotes,menu);
+        inflater.inflate(R.menu.menu_page_mynotes, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.addNotesMenu:
+                addNote();
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    void addNote() {
+        DialogAddNote dialogAddNote = new DialogAddNote();
+        dialogAddNote.login = this.login;
+        dialogAddNote.show(getSupportFragmentManager(), "Ecxa");
+    }
+
 }
