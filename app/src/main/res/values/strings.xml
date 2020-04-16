@@ -2,4 +2,6 @@
     <string name="app_name">kursa4New</string>
     <string name="registration"><u>Зарегистрироваться</u></string>
     <string name="login"><u>Войти</u></string>
+    <string name="themNote">ThemNodes</string>
+    <string name="messageNote">MessageNode</string>
 </resources>

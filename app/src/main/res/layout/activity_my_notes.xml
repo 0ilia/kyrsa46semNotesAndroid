@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyNotes"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MyNotes">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="name"
-        android:id="@+id/myName"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecyclerViewId"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+
+    </androidx.recyclerview.widget.RecyclerView>
+
 </LinearLayout>
