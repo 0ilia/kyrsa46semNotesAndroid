@@ -81,7 +81,7 @@ public class ActivityRegisterForm extends AppCompatActivity {
                             register = response.getBoolean("register");
 
                             errorMessage.setText(messageError);
-                            openMyNotes(register);
+                            openMyNotes(register,login.getText().toString());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -99,11 +99,13 @@ public class ActivityRegisterForm extends AppCompatActivity {
     }
 
 
-    public void openMyNotes(boolean register) {
+    public void openMyNotes(boolean register,String login) {
         if (register) {
+
+
             Intent intent = new Intent(this, MyNotes.class);
+            intent.putExtra("login", this.login.getText().toString());
             startActivity(intent);
         }
     }
-
 }

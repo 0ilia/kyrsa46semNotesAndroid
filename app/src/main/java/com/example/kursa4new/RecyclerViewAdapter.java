@@ -38,21 +38,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.theme_note_Id.setText(mData.get(position).getTheme());
         holder.message_node_Id.setText(mData.get(position).getMessage());
-
-       /* holder.cardView.setOnClickListener(new View.OnClickListener() {
+//        holder.idNote_Id.setText(mData.get(position).getId());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(mContext,Book_Activity.class);
+                Intent intent = new Intent(mContext,DetailPageNote.class);
 
                 // passing data to the book activity
-                intent.putExtra("Title",mData.get(position).getTheme());
-                intent.putExtra("Description",mData.get(position).getMessage());
+                intent.putExtra("theme",mData.get(position).getTheme());
+                intent.putExtra("message",mData.get(position).getMessage());
+                intent.putExtra("id", mData.get(position).getId());
                 // start the activity
                 mContext.startActivity(intent);
 
             }
-        });*/
+        });
 
 
 
@@ -65,7 +66,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView theme_note_Id,message_node_Id;
+        TextView theme_note_Id,message_node_Id,idNote_Id;
         CardView cardView ;
 
         public MyViewHolder(View itemView) {
@@ -73,6 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             theme_note_Id = (TextView) itemView.findViewById(R.id.theme_note_Id) ;
             message_node_Id = (TextView) itemView.findViewById(R.id.message_node_Id);
+            idNote_Id = (TextView) itemView.findViewById(R.id.idNotes);
             cardView = (CardView) itemView.findViewById(R.id.cardViewId);
 
 

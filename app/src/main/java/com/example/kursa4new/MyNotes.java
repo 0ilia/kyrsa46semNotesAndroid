@@ -38,6 +38,7 @@ import static com.android.volley.Request.Method.POST;
 public class MyNotes extends AppCompatActivity {
     String login, json = "";
     String theme, message;
+    int id ;
     List<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
@@ -71,9 +72,12 @@ public class MyNotes extends AppCompatActivity {
                             for (int i = 0; i < c.length(); i++) {
 //populates the array, in your case, jsonarray size = 4
                                 JSONObject jsonObject = c.getJSONObject(i);
+
+                                id = jsonObject.getInt("id"); //gets category String
                                 theme = jsonObject.getString("theme"); //gets category String
                                 message = jsonObject.getString("message"); //gets category String
-                                notes.add(new Note(theme, message));
+                                //Log.d("CCCCID", String.valueOf(id));
+                                notes.add(new Note(theme, message,id));
                                 setAdapter();
                             }
                         } catch (JSONException e) {
