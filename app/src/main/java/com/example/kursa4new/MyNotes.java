@@ -94,9 +94,23 @@ public class MyNotes extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        notes.clear();
+
+
+
         mt = new MyTask();
         mt.execute();
+
+        adapter = new RecyclerViewAdapter(this, notes);
+        // устанавливаем для списка адаптер
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mt.cancel(true);
+        mt.isCancelled();
     }
 
     String login;
@@ -113,22 +127,27 @@ public class MyNotes extends AppCompatActivity {
         setContentView(R.layout.activity_my_notes);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewId);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
         Intent intent = getIntent();
 
         login = intent.getStringExtra("login");
 
-        Log.d("CCCC", login);
+        recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewId);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+
+      //  Log.d("CCCC", login);
 
 
         //  setInitialData();
 
 
+
+        notes.clear();
+
         adapter = new RecyclerViewAdapter(this, notes);
         // устанавливаем для списка адаптер
         recyclerView.setAdapter(adapter);
+
 
 
 
