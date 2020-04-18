@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Логин"
+        android:hint="Название"
         android:inputType="textPersonName"
         android:maxLength="15" />
 
@@ -26,11 +26,31 @@
         android:id="@+id/message_Note_EditText_ID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="e-mail"
+        android:hint="Текст"
         android:inputType="textPersonName" />
 
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Сохранить"
+    android:textAllCaps="false"
+    android:onClick="saveNotes"
+    />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Удалить"
+        android:textAllCaps="false"
+        android:onClick="deleteNotes"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/resultMessageForDetailPage"
+        android:textColor="@color/red"
+        android:textStyle="italic"
 
-
+        />
     <!--<EditText
         android:id="@+id/confirmPasswordPlainTextId_reg"
         android:layout_width="match_parent"
