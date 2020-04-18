@@ -120,6 +120,7 @@ public class DetailPageNote extends AppCompatActivity {
     }
 
     public void openPageAllNote() {
+
         super.onBackPressed();
 
     }

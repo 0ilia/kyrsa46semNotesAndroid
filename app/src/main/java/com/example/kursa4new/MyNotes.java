@@ -45,47 +45,45 @@ public class MyNotes extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             try {
-            while (true) {
-                notes.clear();
-                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                JSONObject object = new JSONObject();
-                // Enter the correct url for your api service site
-                String url = "http://10.0.2.2:3005/getAllNotes/" + login;
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.d("CCCC", response.toString());
-                                try {
-                                    JSONArray c = response.getJSONArray("notes");
-                                    for (int i = 0; i < c.length(); i++) {
+                while (true) {
+                    notes.clear();
+                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                    JSONObject object = new JSONObject();
+                    // Enter the correct url for your api service site
+                    String url = "http://10.0.2.2:3005/getAllNotes/" + login;
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.d("CCCC", response.toString());
+                                    try {
+                                        JSONArray c = response.getJSONArray("notes");
+                                        for (int i = 0; i < c.length(); i++) {
 //populates the array, in your case, jsonarray size = 4
-                                        JSONObject jsonObject = c.getJSONObject(i);
+                                            JSONObject jsonObject = c.getJSONObject(i);
 
-                                        id = jsonObject.getInt("id"); //gets category String
-                                        theme = jsonObject.getString("theme"); //gets category String
-                                        message = jsonObject.getString("message"); //gets category String
-                                        //Log.d("CCCCID", String.valueOf(id));
-
-                                        notes.add(new Note(theme, message, id));
-
-                                        adapter.notifyDataSetChanged();
+                                            id = jsonObject.getInt("id"); //gets category String
+                                            theme = jsonObject.getString("theme"); //gets category String
+                                            message = jsonObject.getString("message"); //gets category String
+                                            //Log.d("CCCCID", String.valueOf(id));
+                                                notes.add(new Note(theme, message, id));
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
 
-                        }, new Response.ErrorListener() {
+                            }, new Response.ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                });
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    });
+                    requestQueue.add(jsonObjectRequest);
 
-                requestQueue.add(jsonObjectRequest);
-                Thread.sleep(1000);
-            }
+                    Thread.sleep(1000);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -93,21 +91,29 @@ public class MyNotes extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notes.clear();
+        mt = new MyTask();
+        mt.execute();
+    }
+
     String login;
     String theme, message;
-    int id ;
+    int id;
     List<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
     MyTask mt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_notes);
 
 
-
-            recyclerView   = (RecyclerView) findViewById(R.id.RecyclerViewId);
+        recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewId);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         Intent intent = getIntent();
@@ -117,20 +123,15 @@ public class MyNotes extends AppCompatActivity {
         Log.d("CCCC", login);
 
 
-
-
-
         //  setInitialData();
-
 
 
         adapter = new RecyclerViewAdapter(this, notes);
         // устанавливаем для списка адаптер
         recyclerView.setAdapter(adapter);
 
-     //   notes.clear();
-        mt = new MyTask();
-        mt.execute();
+
+
 
     }
 
@@ -175,7 +176,7 @@ public class MyNotes extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                          Log.e("SSSSS",response.toString());
+                        Log.e("SSSSS", response.toString());
                         try {
                             id = response.getInt("id");
                             openDetailNote(id);
@@ -193,17 +194,16 @@ public class MyNotes extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
 
 
-
     }
 
-    public void openDetailNote(int id ){
+    public void openDetailNote(int id) {
 
-        Intent intent = new Intent(this,DetailPageNote.class);
+        Intent intent = new Intent(this, DetailPageNote.class);
 
         // passing data to the book activity
-        intent.putExtra("theme","");
-        intent.putExtra("message","");
-        intent.putExtra("id",id);
+        intent.putExtra("theme", "");
+        intent.putExtra("message", "");
+        intent.putExtra("id", id);
         // start the activity
         startActivity(intent);
     }
