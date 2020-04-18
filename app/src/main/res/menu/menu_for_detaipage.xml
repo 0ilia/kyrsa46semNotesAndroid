@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="Back"
+
+        android:id="@+id/back_in_allNotes_id"
         android:icon="@drawable/back"
-        android:id="@+id/addNotesMenu"
-        app:showAsAction="always"
-        ></item>
+        android:title="Back"
+
+        app:showAsAction="always" />
 </menu>

@@ -6,9 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.Sampler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -51,22 +55,22 @@ public class DetailPageNote extends AppCompatActivity {
         themeEditText.setText(theme);
         messageEditText.setText(message);
 
+
+
     }
 
     public void saveNotes(View view) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
-       /* try {
+        try {
             //input your API parameters
-            object.put("id", id);
             object.put("theme", themeEditText.getText().toString());
             object.put("message", messageEditText.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
         // Enter the correct url for your api service site
-        String url = "http://10.0.2.2:3005/updateNote/"+themeEditText.getText().toString()+"/"+
-                messageEditText.getText().toString()+"/"+id;
+        String url = "http://10.0.2.2:3005/updateNote/"+id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(PUT, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -124,4 +128,25 @@ public class DetailPageNote extends AppCompatActivity {
         super.onBackPressed();
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_for_detaipage, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.back_in_allNotes_id:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }
