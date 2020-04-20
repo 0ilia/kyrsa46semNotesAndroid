@@ -3,10 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="Add"
-        android:icon="@drawable/add_notes"
-        android:id="@+id/addNotesMenu"
-        app:showAsAction="ifRoom"
+        android:title="Обновить"
+        android:icon="@drawable/refresh"
+        android:orderInCategory="99"
+
+        android:id="@+id/redresNoteMenuItemID"
+        app:showAsAction="always"
 
         ></item>
+    <item
+        android:title="Добавить"
+        android:orderInCategory="100"
+        android:icon="@drawable/add_notes"
+        android:id="@+id/addNotesMenu"
+        app:showAsAction="always"
+
+        ></item>
+
+    <item
+        android:id="@+id/sortByDateCreate_MenuItemID"
+        android:orderInCategory="98"
+        android:icon="@drawable/create"
+        android:title="Сортировка по времении создания"
+        app:showAsAction="always"></item>
+  <!--  <item
+        android:id="@+id/sortByDateUpdate_MenuItemID"
+        android:icon="@drawable/update"
+        android:title="Сортировка по времении обновления"
+        app:showAsAction="always"
+
+        ></item>-->
+
+ <!--   <item
+        android:icon="@drawable/sort"
+        android:menuCategory="secondary"
+        android:orderInCategory="303"
+        android:title=" Menu sort"
+        app:showAsAction="always">
+        <menu>
+
+
+        </menu>
+    </item>-->
+
 </menu>
