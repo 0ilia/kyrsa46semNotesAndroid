@@ -2,6 +2,7 @@ package com.example.kursa4new;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         holder.theme_note_Id.setText(mData.get(position).getTheme());
         holder.message_node_Id.setText(mData.get(position).getMessage());
@@ -42,13 +43,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(mContext,DetailPageNote.class);
 
                 // passing data to the book activity
                 intent.putExtra("theme",mData.get(position).getTheme());
                 intent.putExtra("message",mData.get(position).getMessage());
                 intent.putExtra("id", mData.get(position).getId());
+                intent.putExtra("idItem",holder.getAdapterPosition());
                 // start the activity
                 mContext.startActivity(intent);
 

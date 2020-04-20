@@ -43,78 +43,61 @@ public class MyNotes extends AppCompatActivity {
     class MyTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-
-            try {
-                while (true) {
-                    notes.clear();
-                    RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                    JSONObject object = new JSONObject();
-                    // Enter the correct url for your api service site
-                    String url = "http://10.0.2.2:3005/getAllNotes/" + login;
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Log.d("CCCC", response.toString());
-                                    try {
-                                        JSONArray c = response.getJSONArray("notes");
-                                        for (int i = 0; i < c.length(); i++) {
-//populates the array, in your case, jsonarray size = 4
-                                            JSONObject jsonObject = c.getJSONObject(i);
-
-                                            id = jsonObject.getInt("id"); //gets category String
-                                            theme = jsonObject.getString("theme"); //gets category String
-                                            message = jsonObject.getString("message"); //gets category String
-                                            //Log.d("CCCCID", String.valueOf(id));
-                                                notes.add(new Note(theme, message, id));
-                                            adapter.notifyDataSetChanged();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                            }, new Response.ErrorListener() {
-
+        notes.clear();
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            JSONObject object = new JSONObject();
+            // Enter the correct url for your api service site
+            String url = "http://10.0.2.2:3005/getAllNotes/" + login;
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
+                    new Response.Listener<JSONObject>() {
                         @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-                    });
-                    requestQueue.add(jsonObjectRequest);
+                        public void onResponse(JSONObject response) {
+                            Log.d("CCCC", response.toString());
+                            try {
+                                JSONArray c = response.getJSONArray("notes");
+                                for (int i = 0; i < c.length(); i++) {
+//populates the array, in your case, jsonarray size = 4
+                                    JSONObject jsonObject = c.getJSONObject(i);
 
-                    Thread.sleep(1000);
+                                    id = jsonObject.getInt("id"); //gets category String
+                                    theme = jsonObject.getString("theme"); //gets category String
+                                    message = jsonObject.getString("message"); //gets category String
+                                    //Log.d("CCCCID", String.valueOf(id));
+                                    notes.add(new Note(theme, message, id));
+                                    adapter.notifyDataSetChanged();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            });
+            requestQueue.add(jsonObjectRequest);
             return null;
         }
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
 
-
-
+        adapter = new RecyclerViewAdapter(this, notes);
+        recyclerView.setAdapter(adapter);
         mt = new MyTask();
         mt.execute();
 
-        adapter = new RecyclerViewAdapter(this, notes);
-        // устанавливаем для списка адаптер
-        recyclerView.setAdapter(adapter);
+        // idItem = intent.getIntExtra("idItem",0);
+      /*  DetailPageNote detailPageNote = new DetailPageNote();
+        Log.e("FFFFFFF", String.valueOf(detailPageNote.idItem));*/
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        mt.cancel(true);
-        mt.isCancelled();
-    }
-
-    String login;
-    String theme, message;
+    String theme, message,login;
     int id;
     List<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
@@ -126,33 +109,16 @@ public class MyNotes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_notes);
 
-
         Intent intent = getIntent();
-
         login = intent.getStringExtra("login");
 
-        recyclerView = (RecyclerView) findViewById(R.id.RecyclerViewId);
+        recyclerView =  findViewById(R.id.RecyclerViewId);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
 
-      //  Log.d("CCCC", login);
 
 
-        //  setInitialData();
-
-
-
-        notes.clear();
-
-        adapter = new RecyclerViewAdapter(this, notes);
-        // устанавливаем для списка адаптер
-        recyclerView.setAdapter(adapter);
-
-
-
-
-
-    }
+        }
 
 
     @Override
@@ -176,7 +142,6 @@ public class MyNotes extends AppCompatActivity {
 
     void addNote() {
         //recyclerView.setAdapter(null);
-
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
