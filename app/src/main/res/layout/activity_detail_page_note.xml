@@ -5,16 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginRight="20dp"
     android:gravity="top"
     android:orientation="vertical"
-    tools:context=".DetailPageNote"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginTop="20dp"
-    >
-
-
-
+    tools:context=".DetailPageNote">
 
     <EditText
         android:id="@+id/theme_Note_EditText_ID"
@@ -33,61 +29,49 @@
         android:hint="Текст"
         android:inputType="textPersonName" />
 
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Сохранить"
-    android:textAllCaps="false"
-    android:onClick="saveNotes"
-    />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Удалить"
-        android:textAllCaps="false"
-        android:onClick="deleteNotes"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/resultMessageForDetailPage"
-        android:textColor="@color/red"
-        android:textStyle="italic"
-
-        />
-    <!--<EditText
-        android:id="@+id/confirmPasswordPlainTextId_reg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Повторите пароль"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/registerButtonId_reg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="registerButtonClick_reg"
-        android:text="Зарегистрироваться"
+        android:onClick="saveNotes"
+        android:text="Сохранить"
         android:textAllCaps="false" />
 
-    <LinearLayout
-
-        android:layout_width="wrap_content"
+    <Button
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:onClick="deleteNotes"
+        android:text="Удалить"
+        android:textAllCaps="false" />
 
+    <TextView
+        android:id="@+id/resultMessageForDetailPage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:textStyle="italic"
+        />
 
-
-        <TextView
-            android:id="@+id/errorMessageAuthForm"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=""
-            android:textAllCaps="false"
-            android:textColor="@color/red"
-
-            android:textStyle="italic" />
-    </LinearLayout>
--->
+    <TextView android:id="@+id/currentDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <!--<Button android:id="@+id/timeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Изменить время"
+        android:onClick="setTime"
+        android:textAllCaps="false"/>
+    <Button android:id="@+id/dateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Изменить дату"
+        android:onClick="setDate"
+        android:textAllCaps="false"/>-->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Создать Уведомления"
+        android:textAllCaps="false"
+        android:onClick="createNotification"
+        />
 </LinearLayout>

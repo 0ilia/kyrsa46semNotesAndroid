@@ -3,6 +3,8 @@ package com.example.kursa4new;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-
-
         errorMessage = findViewById(R.id.errorMessageLoginForm);
 
         login = findViewById(R.id.loginPlainTextId_auth);
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     public void loginButtonClick_auth(View view) {
 

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "677111954449",
+    "firebase_url": "https://notes-2afb0.firebaseio.com",
+    "project_id": "notes-2afb0",
+    "storage_bucket": "notes-2afb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677111954449:android:17517cffd36de3d62785b0",
+        "android_client_info": {
+          "package_name": "com.example.kursa4new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677111954449-7n5m09spldqjdkmmboociaad39k4j1uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKW6uQyFjl_EmPyWGSkLej2f5pBU_CHNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677111954449-7n5m09spldqjdkmmboociaad39k4j1uc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

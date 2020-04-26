@@ -1,17 +1,29 @@
 package com.example.kursa4new;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.AlarmManager;
+import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.renderscript.Sampler;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toolbar;
 
 import com.android.volley.RequestQueue;
@@ -23,6 +35,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import static com.android.volley.Request.Method.DELETE;
 import static com.android.volley.Request.Method.POST;
 import static com.android.volley.Request.Method.PUT;
@@ -33,6 +47,9 @@ public class DetailPageNote extends AppCompatActivity {
     int id;
     EditText themeEditText, messageEditText;
     TextView resMess;
+
+    TextView currentDateTime;
+    Calendar dateAndTime=Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +73,39 @@ public class DetailPageNote extends AppCompatActivity {
         messageEditText.setText(message);
 
 
+     /*   currentDateTime=(TextView)findViewById(R.id.currentDateTime);
+        setInitialDateTime();*/
+
+
 
     }
+
+/*
+    TimePickerDialog.OnTimeSetListener t=new TimePickerDialog.OnTimeSetListener() {
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            dateAndTime.set(Calendar.MINUTE, minute);
+            setInitialDateTime();
+        }
+    };
+
+    // установка обработчика выбора даты
+    DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            dateAndTime.set(Calendar.YEAR, year);
+            dateAndTime.set(Calendar.MONTH, monthOfYear);
+            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            setInitialDateTime();
+        }
+    };
+
+    private void setInitialDateTime() {
+
+        currentDateTime.setText(DateUtils.formatDateTime(this,
+                dateAndTime.getTimeInMillis(),
+                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
+                        | DateUtils.FORMAT_SHOW_TIME));
+    }*/
 
     public void saveNotes(View view) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -70,7 +118,7 @@ public class DetailPageNote extends AppCompatActivity {
             e.printStackTrace();
         }
         // Enter the correct url for your api service site
-        String url = "http://10.0.2.2:3005/updateNote/"+id;
+        String url = "http://10.0.2.2:3005/updateNote/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(PUT, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -98,12 +146,12 @@ public class DetailPageNote extends AppCompatActivity {
         JSONObject object = new JSONObject();
 
         // Enter the correct url for your api service site
-        String url = "http://10.0.2.2:3005/deleteNote/"+id;
+        String url = "http://10.0.2.2:3005/deleteNote/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(DELETE, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                       try {
+                        try {
 
                             resMess.setText(response.getString("delete"));
                             openPageAllNote();
@@ -119,17 +167,12 @@ public class DetailPageNote extends AppCompatActivity {
 
         });
         requestQueue.add(jsonObjectRequest);
-
-
     }
-
     public void openPageAllNote() {
 
         super.onBackPressed();
 
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -149,4 +192,36 @@ public class DetailPageNote extends AppCompatActivity {
     }
 
 
+    public void createNotification(View view) {
+
+
+        Log.e("DDDD", String.valueOf(dateAndTime.getTimeInMillis()));
+        Log.e("DDDD1", String.valueOf(System.currentTimeMillis()));
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setWhen(/*dateAndTime.getTimeInMillis()*/System.currentTimeMillis())
+                .setTicker(themeEditText.getText().toString())
+                .setSmallIcon(R.drawable.notificationnote)
+                .setContentTitle(themeEditText.getText().toString())
+                .setContentText(messageEditText.getText().toString());
+
+        Notification notification = builder.build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(id, notification);
+
+    }
+
+  /*  public void setTime(View view) {
+        new TimePickerDialog(DetailPageNote.this, t,
+                dateAndTime.get(Calendar.HOUR_OF_DAY),
+                dateAndTime.get(Calendar.MINUTE), true)
+                .show();
+    }
+
+    public void setDate(View view) {
+        new DatePickerDialog(DetailPageNote.this, d,
+                dateAndTime.get(Calendar.YEAR),
+                dateAndTime.get(Calendar.MONTH),
+                dateAndTime.get(Calendar.DAY_OF_MONTH))
+                .show();
+    }*/
 }

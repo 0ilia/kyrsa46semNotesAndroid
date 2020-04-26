@@ -73,10 +73,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            theme_note_Id = (TextView) itemView.findViewById(R.id.theme_note_Id) ;
-            message_node_Id = (TextView) itemView.findViewById(R.id.message_node_Id);
-            idNote_Id = (TextView) itemView.findViewById(R.id.idNotes);
-            cardView = (CardView) itemView.findViewById(R.id.cardViewId);
+            theme_note_Id =  itemView.findViewById(R.id.theme_note_Id) ;
+            message_node_Id =  itemView.findViewById(R.id.message_node_Id);
+            idNote_Id =  itemView.findViewById(R.id.idNotes);
+            cardView =  itemView.findViewById(R.id.cardViewId);
 
 
         }
