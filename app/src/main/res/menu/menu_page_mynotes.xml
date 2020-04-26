@@ -20,7 +20,7 @@
         ></item>
 
     <item
-        android:id="@+id/redresNoteMenuItemID"
+        android:id="@+id/refreshNoteMenuItemID"
         android:icon="@drawable/refresh"
         android:title="Обновить"
         app:showAsAction="ifRoom"

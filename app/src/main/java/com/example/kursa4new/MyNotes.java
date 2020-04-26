@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
@@ -35,14 +36,18 @@ import static com.android.volley.Request.Method.POST;
 
 
 public class MyNotes extends AppCompatActivity {
-    class MyTask extends AsyncTask<Void, Void, Void> {
+    class MyTaskGetAllNotes extends AsyncTask<Void, Void, Void> {
+        String url;
+        MyTaskGetAllNotes(String url){
+            this.url=url;
+        }
         @Override
         protected Void doInBackground(Void... params) {
             notes.clear();
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             JSONObject object = new JSONObject();
             // Enter the correct url for your api service site
-            String url = "http://10.0.2.2:3005/getAllNotes/" + login;
+            //String url = "http://10.0.2.2:3005/getAllNotes/" + login;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -78,6 +83,8 @@ public class MyNotes extends AppCompatActivity {
     }
 
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -85,7 +92,7 @@ public class MyNotes extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter(this, notes);
         recyclerView.setAdapter(adapter);
-        mt = new MyTask();
+        mt = new MyTaskGetAllNotes("http://10.0.2.2:3005/getAllNotes/" + login);
         mt.execute();
 
     }
@@ -95,7 +102,7 @@ public class MyNotes extends AppCompatActivity {
     ArrayList<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter, filterAdapter;
-    MyTask mt;
+    MyTaskGetAllNotes mt;
     EditText search;
 
     @Override
@@ -167,7 +174,7 @@ public class MyNotes extends AppCompatActivity {
             case R.id.addNotesMenu:
                 addNote();
                 return true;
-            case R.id.redresNoteMenuItemID:
+            case R.id.refreshNoteMenuItemID:
                 onResume();
                 return true;
             case R.id.sortByDateCreate_MenuItemID:
@@ -175,6 +182,14 @@ public class MyNotes extends AppCompatActivity {
                 adapter = new RecyclerViewAdapter(this, notes);
                 recyclerView.setAdapter(adapter);
                 return true;
+            case R.id.sortByDateUpdate_MenuItemID:
+                adapter = new RecyclerViewAdapter(this, notes);
+                recyclerView.setAdapter(adapter);
+                mt = new MyTaskGetAllNotes("http://10.0.2.2:3005/sortByDateUpdate/" + login);
+                mt.execute();
+
+                return  true;
+
             case R.id.SortByAlphabetA_ZID:
                 Collections.sort(notes, new CustomComparator());
                 adapter = new RecyclerViewAdapter(this, notes);
