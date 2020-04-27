@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -54,16 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
-        try {
+      /*  try {
             //input your API parameters
             object.put("login",login.getText().toString());
             object.put( "password",password.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
         // Enter the correct url for your api service site
-        String url = "http://10.0.2.2:3005/loginUser/";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
+        String url = "http://10.0.2.2:3005/loginUser/"+login.getText().toString()+"/"+password.getText().toString();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -105,9 +106,6 @@ public  void openMyNotes(boolean register,String login){
 
 
     public void registerTextViewClick_auth(View view) {
-
-
-
 
         Intent intent = new Intent(this, ActivityRegisterForm.class);
         startActivity(intent);
