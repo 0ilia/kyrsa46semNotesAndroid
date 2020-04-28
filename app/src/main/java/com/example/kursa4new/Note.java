@@ -5,12 +5,14 @@ public class Note {
     private String theme;
     private String message;
     private String dateUpdate;
+    private String dateCreate;
 
-    public Note(String theme, String message, int id,String dateUpdate) {
+    public Note(String theme, String message, int id,String dateUpdate,String dateCreate) {
 
         this.theme = theme;
         this.message = message;
         this.dateUpdate = dateUpdate;
+        this.dateCreate = dateCreate;
         this.id = id;
     }
 
@@ -20,8 +22,14 @@ public class Note {
     public String getDateUpdate() {
         return this.dateUpdate;
     }
+    public String getDateCreate() {
+        return this.dateCreate;
+    }
     public void setDateUpdate(String dateUpdate) {
         this.dateUpdate = dateUpdate;
+    }
+    public void setDateCreate(String dateCreate) {
+        this.dateCreate = dateCreate;
     }
 
 

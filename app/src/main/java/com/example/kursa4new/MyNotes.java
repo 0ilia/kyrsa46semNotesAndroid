@@ -68,8 +68,9 @@ public class MyNotes extends AppCompatActivity {
                                     theme = jsonObject.getString("theme"); //gets category String
                                     message = jsonObject.getString("message"); //gets category String
                                     updatedAt = jsonObject.getString("updatedAt"); //gets category String
-                                    //Log.d("CCCCID", String.valueOf(id));
-                                    notes.add(new Note(theme, message, id, updatedAt));
+                                    createdAt = jsonObject.getString("createdAt"); //gets category String
+                                    Log.d("CCCCID", String.valueOf(createdAt));
+                                    notes.add(new Note(theme, message, id, updatedAt,createdAt));
                                     adapter.notifyDataSetChanged();
                                 }
                             } catch (JSONException e) {
@@ -88,18 +89,6 @@ public class MyNotes extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    /*    Intent intent = getIntent();
-            String name ="";
-             name += intent.getStringExtra("name");
-
-            Log.e("FFFFF", name);*/
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -112,12 +101,10 @@ public class MyNotes extends AppCompatActivity {
             message = data.getStringExtra("message");
             updatedAt = data.getStringExtra("updatedAt");
 
+            createdAt = data.getStringExtra("createdAt");
 
-         /*   SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date(System.currentTimeMillis());
-            //  System.out.println(formatter.format(date));
-            updatedAt = formatter.format(date);*/
-            notes.set(updateIndex, new Note(theme, message, id, updatedAt));
+
+            notes.set(updateIndex, new Note(theme, message, id, updatedAt,createdAt));
             adapter.notifyItemChanged(updateIndex);
 //            Log.e("CCCCCCCCCCC",updatedAt);
         }else if(data.getStringExtra("function").equals("delete")){
@@ -129,7 +116,7 @@ public class MyNotes extends AppCompatActivity {
     }
 
 
-    String theme, message, login, updatedAt;
+    String theme, message, login, updatedAt,createdAt;
     int id;
     ArrayList<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
@@ -196,35 +183,43 @@ public class MyNotes extends AppCompatActivity {
         return true;
     }
 
-    public class CustomComparatorSortByAlphabet implements Comparator<Note> {
+    public class CustomComparatorSortByAlphabetA_Z implements Comparator<Note> {
         @Override
         public int compare(Note o1, Note o2) {
-            return o1.getTheme().compareTo(o2.getTheme());
+            return o1.getTheme().toLowerCase().compareTo(o2.getTheme().toLowerCase());
+        }
+    }
+    public class CustomComparatorSortByAlphabetZ_A implements Comparator<Note> {
+        @Override
+        public int compare(Note o1, Note o2) {
+            return o2.getTheme().toLowerCase().compareTo(o1.getTheme().toLowerCase());
         }
     }
     public class CustomComparatorSortDateUpdate implements Comparator<Note> {
         @Override
         public int compare(Note o1, Note o2) {
-            return o2.getDateUpdate().compareTo(o1.getDateUpdate());
+            return o1.getDateUpdate().compareTo(o2.getDateUpdate());
+        }
+    }
+    public class CustomComparatorSortByDateCreate implements Comparator<Note> {
+        @Override
+        public int compare(Note o1, Note o2) {
+            return o1.getDateCreate().compareTo(o2.getDateCreate());
         }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-int count = 0 ;
-        int id = item.getItemId();
-        switch (id) {
+        int idMenu = item.getItemId();
+        switch (idMenu) {
             case R.id.addNotesMenu:
                 addNote();
                 return true;
-
             case R.id.sortByDateCreate_MenuItemID:
-            if(count==0) {
-                Collections.reverse(notes);
+                Collections.sort(notes, new CustomComparatorSortByDateCreate());
                 adapter = new RecyclerViewAdapter(this, notes);
                 recyclerView.setAdapter(adapter);
                 return true;
-            }
             case R.id.sortByDateUpdate_MenuItemID:
                 Collections.sort(notes, new CustomComparatorSortDateUpdate());
                 adapter = new RecyclerViewAdapter(this, notes);
@@ -232,14 +227,12 @@ int count = 0 ;
                 return true;
 
             case R.id.SortByAlphabetA_ZID:
-                Collections.sort(notes, new CustomComparatorSortByAlphabet());
+                Collections.sort(notes, new CustomComparatorSortByAlphabetA_Z());
                 adapter = new RecyclerViewAdapter(this, notes);
                 recyclerView.setAdapter(adapter);
                 return true;
             case R.id.SortByAlphabetZ_AID:
-
-                Collections.sort(notes, new CustomComparatorSortByAlphabet());
-                Collections.reverse(notes);
+                Collections.sort(notes, new CustomComparatorSortByAlphabetZ_A());
                 adapter = new RecyclerViewAdapter(this, notes);
                 recyclerView.setAdapter(adapter);
                 return true;
@@ -271,7 +264,9 @@ int count = 0 ;
                         Log.e("SSSSS", response.toString());
                         try {
                             id = response.getInt("id");
-                            openDetailNote(id, updatedAt);
+                            updatedAt = response.getString("updatedAt");
+                            createdAt = response.getString("createdAt");
+                            openDetailNote(id, updatedAt,createdAt);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -286,26 +281,29 @@ int count = 0 ;
         requestQueue.add(jsonObjectRequest);
     }
 
-    public void openDetailNote(int id, String updatedAt) {
+    public void openDetailNote(int id, String updatedAt,String createdAt) {
 
-        notes.add(new Note(theme, message, id, updatedAt));
+        notes.add(new Note(theme, message, id, updatedAt,createdAt));
         adapter.notifyDataSetChanged();
 
         Intent intent = new Intent(this, DetailPageNote.class);
         intent.putExtra("theme", "");
         intent.putExtra("message", "");
-        intent.putExtra("id", id);
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        //  System.out.println(formatter.format(date));
-        updatedAt = formatter.format(date);
-
         intent.putExtra("updatedAt", updatedAt);
+        intent.putExtra("createdAt", createdAt);
+        intent.putExtra("id", id);
         intent.putExtra("idItem", adapter.getItemCount() - 1);
       //  startActivity(intent);
         startActivityForResult(intent, 1);
     }
 
 
+    /*public String getNowDate(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        //  System.out.println(formatter.format(date));
+        updatedAt = formatter.format(date);
+Log.e("DATE",updatedAt);
+        return updatedAt+".000Z";
+    }*/
 }

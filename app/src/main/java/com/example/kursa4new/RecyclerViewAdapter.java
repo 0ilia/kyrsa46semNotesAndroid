@@ -51,6 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("message",mData.get(position).getMessage());
                 intent.putExtra("id", mData.get(position).getId());
                 intent.putExtra("updatedAt", mData.get(position).getDateUpdate());
+                intent.putExtra("createdAt", mData.get(position).getDateCreate());
           //     intent.putExtra("", mData.get(position).getId());
                 intent.putExtra("idItem",holder.getAdapterPosition());
                 // start the activity
@@ -70,7 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView theme_note_Id,message_node_Id,idNote_Id,dateUpdate_Id;
+        TextView theme_note_Id,message_node_Id,idNote_Id,dateUpdate_Id,dateCreate_Id;
         CardView cardView ;
 
         public MyViewHolder(View itemView) {
@@ -78,6 +79,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             theme_note_Id =  itemView.findViewById(R.id.theme_note_Id) ;
             dateUpdate_Id =  itemView.findViewById(R.id.dateUpdate_Id) ;
+            dateCreate_Id =  itemView.findViewById(R.id.dateCreate_Id) ;
             message_node_Id =  itemView.findViewById(R.id.message_node_Id);
             idNote_Id =  itemView.findViewById(R.id.idNotes);
             cardView =  itemView.findViewById(R.id.cardViewId);

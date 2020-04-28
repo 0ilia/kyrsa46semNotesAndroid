@@ -40,17 +40,15 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static com.android.volley.Request.Method.DELETE;
-import static com.android.volley.Request.Method.POST;
 import static com.android.volley.Request.Method.PUT;
 
 public class DetailPageNote extends AppCompatActivity {
 
-    String theme, message,updatedAt;
+    String theme, message,updatedAt,createdAt;
     int id,idItem;
     EditText themeEditText, messageEditText;
     TextView resMess;
 
-    TextView currentDateTime;
     Calendar dateAndTime=Calendar.getInstance();
 
     @Override
@@ -66,20 +64,17 @@ public class DetailPageNote extends AppCompatActivity {
         theme = intent.getStringExtra("theme");
         message = intent.getStringExtra("message");
         updatedAt = intent.getStringExtra("updatedAt");
+        createdAt = intent.getStringExtra("createdAt");
         id = intent.getIntExtra("id", 0);
 
         idItem = intent.getIntExtra("idItem", 0);
-         Log.e("XXXXXXXXXXXXXX", String.valueOf(idItem));
+
+         Log.e("XXXXXXXXXXXXXX", String.valueOf(updatedAt));
+         Log.e("XXXXXXXXXXXXXX", String.valueOf(createdAt));
 
         //id = Integer.parseInt(idString);
-
-
         themeEditText.setText(theme);
         messageEditText.setText(message);
-
-
-
-
     }
 
 
@@ -103,10 +98,8 @@ public class DetailPageNote extends AppCompatActivity {
                             theme = themeEditText.getText().toString();
                             message = messageEditText.getText().toString();
 
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            Date date = new Date(System.currentTimeMillis());
-                            //  System.out.println(formatter.format(date));
-                            updatedAt = formatter.format(date);
+                            updatedAt = response.getString("updatedAt");
+                            Log.e("CCCC",updatedAt);
                             resMess.setText(response.getString("update"));
 
                         } catch (JSONException e) {
@@ -133,19 +126,16 @@ public class DetailPageNote extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
                             resMess.setText(response.getString("delete"));
                             openPageAllNote();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
             }
-
         });
         requestQueue.add(jsonObjectRequest);
     }
@@ -170,8 +160,8 @@ public class DetailPageNote extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
+        int idMenu = item.getItemId();
+        switch (idMenu) {
             case R.id.back_in_allNotes_id:
 
                 Intent intent = new Intent();
@@ -180,6 +170,7 @@ public class DetailPageNote extends AppCompatActivity {
                 intent.putExtra("theme", theme);
                 intent.putExtra("message", message);
                 intent.putExtra("updatedAt", updatedAt);
+                intent.putExtra("createdAt", createdAt);
                 intent.putExtra("id", id);
                 setResult(1, intent);
                 finish();
