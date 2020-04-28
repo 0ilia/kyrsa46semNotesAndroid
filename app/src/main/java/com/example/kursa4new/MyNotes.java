@@ -26,6 +26,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +61,9 @@ public class MyNotes extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("CCCC", response.toString());
+                            String s =  response.toString();
+                          //  Log.d("CCCC", s);
+                            saveToJSON(s);
                             try {
                                 JSONArray c = response.getJSONArray("notes");
                                 for (int i = 0; i < c.length(); i++) {
@@ -115,7 +121,28 @@ public class MyNotes extends AppCompatActivity {
 //        Log.e("FFFF",data.getStringExtra("name"));
     }
 
+    public  void  saveToJSON(String json){
+        file = new File(getFilesDir(), "notes.json");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            FileWriter fw = new FileWriter(file, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(json);
 
+            bw.close();
+            fw.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    File file;
     String theme, message, login, updatedAt,createdAt;
     int id;
     ArrayList<Note> notes = new ArrayList<>();
@@ -143,7 +170,6 @@ public class MyNotes extends AppCompatActivity {
 
         search = findViewById(R.id.edittextSearchId);
 
-
         search = findViewById(R.id.edittextSearchId);
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -160,6 +186,7 @@ public class MyNotes extends AppCompatActivity {
             }
         });
     }
+
 
 
     private void filter(String text) {
@@ -236,6 +263,12 @@ public class MyNotes extends AppCompatActivity {
                 adapter = new RecyclerViewAdapter(this, notes);
                 recyclerView.setAdapter(adapter);
                 return true;
+
+            case R.id.saveToJSONMenuItem_ID:
+                mt = new MyTaskGetAllNotes("http://10.0.2.2:3005/getAllNotes/" + login);
+                mt.execute();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
