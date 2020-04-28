@@ -35,7 +35,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.android.volley.Request.Method.DELETE;
 import static com.android.volley.Request.Method.POST;
@@ -43,8 +45,8 @@ import static com.android.volley.Request.Method.PUT;
 
 public class DetailPageNote extends AppCompatActivity {
 
-    String theme, message;
-    int id;
+    String theme, message,updatedAt;
+    int id,idItem;
     EditText themeEditText, messageEditText;
     TextView resMess;
 
@@ -63,9 +65,12 @@ public class DetailPageNote extends AppCompatActivity {
 
         theme = intent.getStringExtra("theme");
         message = intent.getStringExtra("message");
+        updatedAt = intent.getStringExtra("updatedAt");
         id = intent.getIntExtra("id", 0);
 
-        // Log.e("XXXXXXXXXXXXXX",idString);
+        idItem = intent.getIntExtra("idItem", 0);
+         Log.e("XXXXXXXXXXXXXX", String.valueOf(idItem));
+
         //id = Integer.parseInt(idString);
 
 
@@ -73,39 +78,10 @@ public class DetailPageNote extends AppCompatActivity {
         messageEditText.setText(message);
 
 
-     /*   currentDateTime=(TextView)findViewById(R.id.currentDateTime);
-        setInitialDateTime();*/
-
 
 
     }
 
-/*
-    TimePickerDialog.OnTimeSetListener t=new TimePickerDialog.OnTimeSetListener() {
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            dateAndTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            dateAndTime.set(Calendar.MINUTE, minute);
-            setInitialDateTime();
-        }
-    };
-
-    // установка обработчика выбора даты
-    DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            dateAndTime.set(Calendar.YEAR, year);
-            dateAndTime.set(Calendar.MONTH, monthOfYear);
-            dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            setInitialDateTime();
-        }
-    };
-
-    private void setInitialDateTime() {
-
-        currentDateTime.setText(DateUtils.formatDateTime(this,
-                dateAndTime.getTimeInMillis(),
-                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
-                        | DateUtils.FORMAT_SHOW_TIME));
-    }*/
 
     public void saveNotes(View view) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -124,8 +100,15 @@ public class DetailPageNote extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            theme = themeEditText.getText().toString();
+                            message = messageEditText.getText().toString();
 
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Date date = new Date(System.currentTimeMillis());
+                            //  System.out.println(formatter.format(date));
+                            updatedAt = formatter.format(date);
                             resMess.setText(response.getString("update"));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -144,8 +127,6 @@ public class DetailPageNote extends AppCompatActivity {
     public void deleteNotes(View view) {
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
-
-        // Enter the correct url for your api service site
         String url = "http://10.0.2.2:3005/deleteNote/" + id;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(DELETE, url, object,
                 new Response.Listener<JSONObject>() {
@@ -168,9 +149,16 @@ public class DetailPageNote extends AppCompatActivity {
         });
         requestQueue.add(jsonObjectRequest);
     }
+
     public void openPageAllNote() {
 
-        super.onBackPressed();
+       // super.onBackPressed();
+
+        Intent intent = new Intent();
+        intent.putExtra("function", "delete");
+        intent.putExtra("idItem", idItem);
+        setResult(1, intent);
+        finish();
 
     }
     @Override
@@ -185,7 +173,17 @@ public class DetailPageNote extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.back_in_allNotes_id:
-                super.onBackPressed();
+
+                Intent intent = new Intent();
+                intent.putExtra("function", "update");
+                intent.putExtra("idItem", idItem);
+                intent.putExtra("theme", theme);
+                intent.putExtra("message", message);
+                intent.putExtra("updatedAt", updatedAt);
+                intent.putExtra("id", id);
+                setResult(1, intent);
+                finish();
+            //    super.onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -210,18 +208,5 @@ public class DetailPageNote extends AppCompatActivity {
 
     }
 
-  /*  public void setTime(View view) {
-        new TimePickerDialog(DetailPageNote.this, t,
-                dateAndTime.get(Calendar.HOUR_OF_DAY),
-                dateAndTime.get(Calendar.MINUTE), true)
-                .show();
-    }
 
-    public void setDate(View view) {
-        new DatePickerDialog(DetailPageNote.this, d,
-                dateAndTime.get(Calendar.YEAR),
-                dateAndTime.get(Calendar.MONTH),
-                dateAndTime.get(Calendar.DAY_OF_MONTH))
-                .show();
-    }*/
 }

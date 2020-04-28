@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="red">#F82F2F</color>
-    <color name="backgroundForCardView">#BDC8ED</color>
+    <color name="backgroundForCardView">#F0F1F3</color>
 
 </resources>

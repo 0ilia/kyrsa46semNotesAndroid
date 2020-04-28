@@ -1,5 +1,6 @@
 package com.example.kursa4new;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -49,10 +50,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("theme",mData.get(position).getTheme());
                 intent.putExtra("message",mData.get(position).getMessage());
                 intent.putExtra("id", mData.get(position).getId());
+                intent.putExtra("updatedAt", mData.get(position).getDateUpdate());
+          //     intent.putExtra("", mData.get(position).getId());
                 intent.putExtra("idItem",holder.getAdapterPosition());
                 // start the activity
-                mContext.startActivity(intent);
-
+              //  mContext.startActivity(intent);
+                ((Activity)mContext).startActivityForResult(intent,1);
             }
         });
 
@@ -67,13 +70,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView theme_note_Id,message_node_Id,idNote_Id;
+        TextView theme_note_Id,message_node_Id,idNote_Id,dateUpdate_Id;
         CardView cardView ;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             theme_note_Id =  itemView.findViewById(R.id.theme_note_Id) ;
+            dateUpdate_Id =  itemView.findViewById(R.id.dateUpdate_Id) ;
             message_node_Id =  itemView.findViewById(R.id.message_node_Id);
             idNote_Id =  itemView.findViewById(R.id.idNotes);
             cardView =  itemView.findViewById(R.id.cardViewId);

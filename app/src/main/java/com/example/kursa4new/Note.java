@@ -4,17 +4,26 @@ public class Note {
     private  int id;
     private String theme;
     private String message;
+    private String dateUpdate;
 
-    public Note(String theme, String message, int id) {
+    public Note(String theme, String message, int id,String dateUpdate) {
 
         this.theme = theme;
         this.message = message;
+        this.dateUpdate = dateUpdate;
         this.id = id;
     }
 
     public String getTheme() {
         return this.theme;
     }
+    public String getDateUpdate() {
+        return this.dateUpdate;
+    }
+    public void setDateUpdate(String dateUpdate) {
+        this.dateUpdate = dateUpdate;
+    }
+
 
     public int getId() {
         return this.id;
