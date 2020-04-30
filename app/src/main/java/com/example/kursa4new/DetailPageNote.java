@@ -63,7 +63,8 @@ public class DetailPageNote extends AppCompatActivity {
 
         theme = intent.getStringExtra("theme");
         message = intent.getStringExtra("message");
-        updatedAt = intent.getStringExtra("updatedAt");
+    //    updatedAt = intent.getStringExtra("updatedAt");
+        updatedAt = "";
         createdAt = intent.getStringExtra("createdAt");
         id = intent.getIntExtra("id", 0);
 
@@ -125,12 +126,7 @@ public class DetailPageNote extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            resMess.setText(response.getString("delete"));
                             openPageAllNote();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -195,6 +191,7 @@ public class DetailPageNote extends AppCompatActivity {
 
         Notification notification = builder.build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         notificationManager.notify(id, notification);
 
     }

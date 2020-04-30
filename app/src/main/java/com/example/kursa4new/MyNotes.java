@@ -98,6 +98,9 @@ public class MyNotes extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        try {
+
+
         if(data.getStringExtra("function").equals("update")) {
 
 
@@ -111,12 +114,22 @@ public class MyNotes extends AppCompatActivity {
 
 
             notes.set(updateIndex, new Note(theme, message, id, updatedAt,createdAt));
-            adapter.notifyItemChanged(updateIndex);
-//            Log.e("CCCCCCCCCCC",updatedAt);
+            //adapter.notifyItemChanged(updateIndex);
+            adapter = new RecyclerViewAdapter(this, notes);
+            recyclerView.setAdapter(adapter);
+
         }else if(data.getStringExtra("function").equals("delete")){
             int removeIndex = data.getIntExtra("idItem", 0);
             notes.remove(removeIndex);
-            adapter.notifyItemRemoved(removeIndex);
+           //adapter.notifyItemRemoved(removeIndex);
+
+            adapter = new RecyclerViewAdapter(this, notes);
+            recyclerView.setAdapter(adapter);
+
+            Log.e("DEL", String.valueOf(adapter.getItemCount())+"-"+notes.size());
+        }
+        }catch (Exception e){
+            Log.e("Error_onActivityResult",e.getMessage());
         }
 //        Log.e("FFFF",data.getStringExtra("name"));
     }
@@ -190,17 +203,22 @@ public class MyNotes extends AppCompatActivity {
 
 
     private void filter(String text) {
-        ArrayList<Note> filterList = new ArrayList<>();
-        for (Note item : notes) {
-            if (item.getTheme().toLowerCase().contains(text.toLowerCase()) ||
-                    item.getMessage().toLowerCase().contains(text.toLowerCase())
-            ) {
-                filterList.add(item);
+        if(!text.trim().equals("")) {
+            ArrayList<Note> filterList = new ArrayList<>();
+            for (Note item : notes) {
+                if (item.getTheme().toLowerCase().contains(text.toLowerCase()) ||
+                        item.getMessage().toLowerCase().contains(text.toLowerCase())
+                ) {
+                    filterList.add(item);
+                }
             }
+            filterAdapter = new RecyclerViewAdapter(this, filterList);
+            recyclerView.setAdapter(filterAdapter);
         }
-        filterAdapter = new RecyclerViewAdapter(this, filterList);
-        recyclerView.setAdapter(filterAdapter);
-
+        else {
+            adapter = new RecyclerViewAdapter(this, notes);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -225,13 +243,13 @@ public class MyNotes extends AppCompatActivity {
     public class CustomComparatorSortDateUpdate implements Comparator<Note> {
         @Override
         public int compare(Note o1, Note o2) {
-            return o1.getDateUpdate().compareTo(o2.getDateUpdate());
+            return o2.getDateUpdate().compareTo(o1.getDateUpdate());
         }
     }
     public class CustomComparatorSortByDateCreate implements Comparator<Note> {
         @Override
         public int compare(Note o1, Note o2) {
-            return o1.getDateCreate().compareTo(o2.getDateCreate());
+            return o2.getDateCreate().compareTo(o1.getDateCreate());
         }
     }
     @Override

@@ -15,7 +15,10 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Поиск"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerViewId"
         android:layout_width="match_parent"
