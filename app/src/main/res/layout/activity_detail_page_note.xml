@@ -19,7 +19,7 @@
         android:ems="10"
         android:hint="Название"
         android:inputType="textPersonName"
-        android:maxLength="15" />
+       />
 
 
     <EditText
@@ -27,9 +27,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Текст"
-        android:inputType="textPersonName" />
+        android:inputType="textMultiLine"
 
-    <Button
+        />
+
+    <!--<Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="saveNotes"
@@ -41,7 +43,7 @@
         android:layout_height="wrap_content"
         android:onClick="deleteNotes"
         android:text="Удалить"
-        android:textAllCaps="false" />
+        android:textAllCaps="false" />-->
 
     <TextView
         android:id="@+id/resultMessageForDetailPage"
@@ -51,11 +53,11 @@
         android:textStyle="italic"
         />
 
-    <TextView android:id="@+id/currentDateTime"
+    <!--<TextView android:id="@+id/currentDateTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-    <!--<Button android:id="@+id/timeButton"
+    <Button android:id="@+id/timeButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Изменить время"
@@ -66,12 +68,12 @@
         android:layout_height="wrap_content"
         android:text="Изменить дату"
         android:onClick="setDate"
-        android:textAllCaps="false"/>-->
+        android:textAllCaps="false"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Создать Уведомления"
         android:textAllCaps="false"
         android:onClick="createNotification"
-        />
+        />-->
 </LinearLayout>

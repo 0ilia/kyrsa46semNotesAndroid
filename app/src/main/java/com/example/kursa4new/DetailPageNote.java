@@ -81,7 +81,7 @@ public class DetailPageNote extends AppCompatActivity {
     }
 
 
-    public void saveNotes(View view) {
+    public void saveNotes() {
 //crate Note
         if (id == -1) {
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -165,7 +165,7 @@ public class DetailPageNote extends AppCompatActivity {
         }
     }
 
-    public void deleteNotes(View view) {
+    public void deleteNotes() {
         if (id!=-1) {
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             JSONObject object = new JSONObject();
@@ -223,12 +223,21 @@ public class DetailPageNote extends AppCompatActivity {
                 finish();
                 //    super.onBackPressed();
                 return true;
+            case R.id.saveNoteMenuId:
+                saveNotes();
+                return true;
+            case  R.id.deleteNoteMenuId:
+                deleteNotes();
+                return true;
+            case  R.id.notificationNoteMenuId:
+                createNotification();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    public void createNotification(View view) {
+    public void createNotification() {
 
 
         Log.e("DDDD", String.valueOf(dateAndTime.getTimeInMillis()));

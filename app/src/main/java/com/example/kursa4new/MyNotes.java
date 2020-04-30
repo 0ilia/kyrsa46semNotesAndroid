@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -159,6 +160,10 @@ public class MyNotes extends AppCompatActivity {
 
             bw.close();
             fw.close();
+
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Сохраннено в json", Toast.LENGTH_SHORT);
+            toast.show();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -183,7 +188,8 @@ public class MyNotes extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.RecyclerViewId);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new RecyclerViewAdapter(this, notes);
         recyclerView.setAdapter(adapter);

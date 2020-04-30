@@ -8,7 +8,6 @@
     android:id="@+id/cardViewId"
     app:cardCornerRadius="12dp"
     android:layout_margin="7dp"
-    android:weightSum="2"
     >
 
     <LinearLayout
