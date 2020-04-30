@@ -80,6 +80,12 @@ public class DetailPageNote extends AppCompatActivity {
         messageEditText.setText(message);
     }
 
+    @Override
+    public void onBackPressed() {
+      //  super.onBackPressed();
+        backPage();
+    }
+
 
     public void saveNotes() {
 //crate Note
@@ -109,6 +115,7 @@ public class DetailPageNote extends AppCompatActivity {
                                 theme = response.getString("theme");
                                 message = response.getString("message");
                                 function = "create";
+                                resMess.setText(response.getString("create"));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -205,23 +212,28 @@ public class DetailPageNote extends AppCompatActivity {
         return true;
     }
 
+    public  void  backPage(){
+
+        Intent intent = new Intent();
+        intent.putExtra("function", function);
+        intent.putExtra("idItem", idItem);
+        intent.putExtra("theme", theme);
+        intent.putExtra("message", message);
+        intent.putExtra("updatedAt", updatedAt);
+        intent.putExtra("createdAt", createdAt);
+        intent.putExtra("id", id);
+        setResult(1, intent);
+        finish();
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int idMenu = item.getItemId();
         switch (idMenu) {
             case R.id.back_in_allNotes_id:
-
-                Intent intent = new Intent();
-                intent.putExtra("function", function);
-                intent.putExtra("idItem", idItem);
-                intent.putExtra("theme", theme);
-                intent.putExtra("message", message);
-                intent.putExtra("updatedAt", updatedAt);
-                intent.putExtra("createdAt", createdAt);
-                intent.putExtra("id", id);
-                setResult(1, intent);
-                finish();
-                //    super.onBackPressed();
+                backPage();
+                //    super.onBackPresed();
                 return true;
             case R.id.saveNoteMenuId:
                 saveNotes();

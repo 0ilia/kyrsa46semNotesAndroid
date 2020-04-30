@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:hint="Текст"
         android:inputType="textMultiLine"
-
+android:maxLines="7"
         />
 
     <!--<Button

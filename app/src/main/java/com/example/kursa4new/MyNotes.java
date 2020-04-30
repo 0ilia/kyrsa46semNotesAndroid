@@ -3,6 +3,7 @@ package com.example.kursa4new;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -101,8 +102,6 @@ public class MyNotes extends AppCompatActivity {
     {
         try {
         if(data.getStringExtra("function").equals("update")) {
-
-
             int updateIndex = data.getIntExtra("idItem", 0);
             int id = data.getIntExtra("id", 0);
             theme = data.getStringExtra("theme");
@@ -145,6 +144,40 @@ public class MyNotes extends AppCompatActivity {
     }
 
     public  void  saveToJSON(String json){
+        //Save to external storage
+/*
+        Log.e("File", String.valueOf(Environment.getExternalStorageDirectory()));
+
+        File sdPath = Environment.getExternalStorageDirectory();
+        // добавляем свой каталог к пути
+        sdPath = new File(sdPath.getAbsolutePath() + "/notes_"+R.string.project_id);
+        // создаем каталог
+        sdPath.mkdirs();
+
+        File sdFile = new File(sdPath, "notes.json");
+        if (!sdFile.exists()) {
+            try {
+                sdFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            FileWriter fw = new FileWriter(sdFile, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(json);
+
+            bw.close();
+            fw.close();
+
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Сохраннено в json", Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+*/
+
         file = new File(getFilesDir(), "notes.json");
         if (!file.exists()) {
             try {
