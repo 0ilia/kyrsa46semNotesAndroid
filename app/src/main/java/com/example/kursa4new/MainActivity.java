@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }*/
         // Enter the correct url for your api service site
-        String url = "http://10.0.2.2:3005/loginUser/"+login.getText().toString()+"/"+password.getText().toString();
+        String url = getString(R.string.URL)+"/loginUser/"+login.getText().toString()+"/"+password.getText().toString();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override

@@ -4,4 +4,6 @@
     <string name="login"><u>Войти</u></string>
     <string name="themNote">ThemNodes</string>
     <string name="messageNote">MessageNode</string>
+    <!--<string name="URL">http://10.0.2.2:3005</string>-->
+    <string name="URL">https://dc86e42b.ngrok.io </string>
 </resources>

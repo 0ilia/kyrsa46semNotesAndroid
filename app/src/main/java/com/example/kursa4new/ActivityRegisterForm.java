@@ -40,7 +40,7 @@ public class ActivityRegisterForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_form);
 
-
+Log.e("URL", getString(R.string.URL));
         errorMessage = findViewById(R.id.errorMessageAuthForm);
 
         login = findViewById(R.id.loginPlainTextId_reg);
@@ -70,7 +70,7 @@ public class ActivityRegisterForm extends AppCompatActivity {
             e.printStackTrace();
         }
         // Enter the correct url for your api service site
-        String url = "http://10.0.2.2:3005/addUser/";
+        String url =getString(R.string.URL)+"/addUser/";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override

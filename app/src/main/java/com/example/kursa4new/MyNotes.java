@@ -99,8 +99,6 @@ public class MyNotes extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         try {
-
-
         if(data.getStringExtra("function").equals("update")) {
 
 
@@ -114,9 +112,9 @@ public class MyNotes extends AppCompatActivity {
 
 
             notes.set(updateIndex, new Note(theme, message, id, updatedAt,createdAt));
-            //adapter.notifyItemChanged(updateIndex);
-            adapter = new RecyclerViewAdapter(this, notes);
-            recyclerView.setAdapter(adapter);
+            adapter.notifyItemChanged(updateIndex);
+            /*adapter = new RecyclerViewAdapter(this, notes);
+            recyclerView.setAdapter(adapter);*/
 
         }else if(data.getStringExtra("function").equals("delete")){
             int removeIndex = data.getIntExtra("idItem", 0);
@@ -127,6 +125,17 @@ public class MyNotes extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
 
             Log.e("DEL", String.valueOf(adapter.getItemCount())+"-"+notes.size());
+        }else if(data.getStringExtra("function").equals("create")) {
+
+            int id = data.getIntExtra("id", 0);
+            theme = data.getStringExtra("theme");
+            message = data.getStringExtra("message");
+            updatedAt = data.getStringExtra("updatedAt");
+
+            createdAt = data.getStringExtra("createdAt");
+
+            notes.add(new Note(theme, message, id, updatedAt,createdAt));
+            adapter.notifyDataSetChanged();
         }
         }catch (Exception e){
             Log.e("Error_onActivityResult",e.getMessage());
@@ -178,7 +187,7 @@ public class MyNotes extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter(this, notes);
         recyclerView.setAdapter(adapter);
-        mt = new MyTaskGetAllNotes("http://10.0.2.2:3005/getAllNotes/" + login);
+        mt = new MyTaskGetAllNotes(getString(R.string.URL)+"/getAllNotes/" + login);
         mt.execute();
 
         search = findViewById(R.id.edittextSearchId);
@@ -283,7 +292,7 @@ public class MyNotes extends AppCompatActivity {
                 return true;
 
             case R.id.saveToJSONMenuItem_ID:
-                mt = new MyTaskGetAllNotes("http://10.0.2.2:3005/getAllNotes/" + login);
+                mt = new MyTaskGetAllNotes(getString(R.string.URL)+"/getAllNotes/" + login);
                 mt.execute();
                 return true;
 
@@ -293,68 +302,31 @@ public class MyNotes extends AppCompatActivity {
 
 
     void addNote() {
-        //recyclerView.setAdapter(null);
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JSONObject object = new JSONObject();
-        try {
-            //input your API parameters
-            object.put("login", login);
-            object.put("theme", "");
-            object.put("message", "");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        // Enter the correct url for your api service site
-        String url = "http://10.0.2.2:3005/addNote/";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+        Intent intent = new Intent(this, DetailPageNote.class);
+        intent.putExtra("idItem", adapter.getItemCount() - 1);
+        intent.putExtra("login", login);
+        intent.putExtra("id", -1);
+        startActivityForResult(intent, 1);
 
-                        Log.e("SSSSS", response.toString());
-                        try {
-                            id = response.getInt("id");
-                            updatedAt = response.getString("updatedAt");
-                            createdAt = response.getString("createdAt");
-                            openDetailNote(id, updatedAt,createdAt);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
 
-                }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
     }
 
     public void openDetailNote(int id, String updatedAt,String createdAt) {
 
-        notes.add(new Note(theme, message, id, updatedAt,createdAt));
-        adapter.notifyDataSetChanged();
+   /*     notes.add(new Note(theme, message, id, updatedAt,createdAt));
+        adapter.notifyDataSetChanged();*/
 
         Intent intent = new Intent(this, DetailPageNote.class);
-        intent.putExtra("theme", "");
+       /* intent.putExtra("theme", "");
         intent.putExtra("message", "");
         intent.putExtra("updatedAt", updatedAt);
         intent.putExtra("createdAt", createdAt);
         intent.putExtra("id", id);
-        intent.putExtra("idItem", adapter.getItemCount() - 1);
+        intent.putExtra("idItem", adapter.getItemCount() - 1);*/
       //  startActivity(intent);
         startActivityForResult(intent, 1);
     }
 
 
-    /*public String getNowDate(){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        //  System.out.println(formatter.format(date));
-        updatedAt = formatter.format(date);
-Log.e("DATE",updatedAt);
-        return updatedAt+".000Z";
-    }*/
 }
