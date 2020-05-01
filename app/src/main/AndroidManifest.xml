@@ -13,11 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
 
+
         android:theme="@style/Theme.MaterialComponents.DayNight">
-        <activity android:name=".DetailPageNote"></activity>
-        <activity android:name=".MyNotes" />
-        <activity android:name=".ActivityRegisterForm" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".DetailPageNote"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MyNotes"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".ActivityRegisterForm"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

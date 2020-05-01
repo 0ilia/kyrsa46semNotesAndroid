@@ -10,6 +10,13 @@
     android:layout_marginRight="20dp">
 
 
+    <!--<TextView
+        android:id="@+id/about_TextVieew_Id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/about"
+        />-->
     <EditText
         android:id="@+id/loginPlainTextId_reg"
         android:layout_width="match_parent"

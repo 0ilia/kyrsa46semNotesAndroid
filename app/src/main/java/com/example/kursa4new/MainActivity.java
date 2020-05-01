@@ -1,6 +1,8 @@
 package com.example.kursa4new;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -10,6 +12,9 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +32,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Collections;
 
 import static com.android.volley.Request.Method.POST;
 
@@ -164,4 +171,56 @@ public  void openMyNotes(boolean register,String login, String password){
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_for_main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int idMenu = item.getItemId();
+        switch (idMenu) {
+            case R.id.aboutMe_MenuId:
+                dialog();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public  void  dialog(){
+
+        AlertDialog.Builder builder =new AlertDialog.Builder(MainActivity.this);
+       /*  alertdialog.setTitle("alertDialog");
+         alertdialog.setMessage("Проверка");*/
+
+        builder.setTitle("О разработчике")
+                //.setMessage("Мартинкевич Илья")
+                .setMessage(getString(R.string.about))
+                .setCancelable(true)
+
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      /*  Toast toast = Toast.makeText(getApplicationContext(),
+                                "Нажата  кнопка :ДА", Toast.LENGTH_SHORT);
+                        toast.show();*/
+                    }
+                });
+                /*.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Ничего не выбранно ", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });*/
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
 }

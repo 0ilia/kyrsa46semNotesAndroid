@@ -116,14 +116,9 @@ Log.e("BBBBB", String.valueOf(notes.size()));
 Log.e("BBBBB", String.valueOf(adapter.getItemCount()));
 Log.e("BBBBB", String.valueOf(updateIndex));
 
-                if (notes.size()-1 == updateIndex) {
-                    notes.add(new Note(theme, message, id, updatedAt, createdAt));
-                    adapter.notifyDataSetChanged();
 
-                }else {
                     notes.set(updateIndex, new Note(theme, message, id, updatedAt, createdAt));
                     adapter.notifyItemChanged(updateIndex);
-                }
             /*adapter = new RecyclerViewAdapter(this, notes);
             recyclerView.setAdapter(adapter);*/
 

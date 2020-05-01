@@ -2,11 +2,19 @@ package com.example.kursa4new;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,8 +37,7 @@ import static com.android.volley.Request.Method.POST;
 public class ActivityRegisterForm extends AppCompatActivity {
 
     EditText login, password, email, confirmPass;
-    TextView errorMessage;
-
+    TextView errorMessage,linkVk;
 
     String messageError = "";
     boolean register = false;
@@ -39,6 +46,9 @@ public class ActivityRegisterForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_form);
+/*
+         linkVk =  findViewById(R.id.about_TextVieew_Id);
+        linkVk.setMovementMethod(LinkMovementMethod.getInstance());*/
 
 Log.e("URL", getString(R.string.URL));
         errorMessage = findViewById(R.id.errorMessageAuthForm);
@@ -65,7 +75,6 @@ Log.e("URL", getString(R.string.URL));
             object.put("email", email.getText().toString());
             object.put("password", password.getText().toString());
             object.put("confirmPassword", confirmPass.getText().toString());
-            object.put("cookie", "d");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -81,7 +90,7 @@ Log.e("URL", getString(R.string.URL));
                             register = response.getBoolean("register");
 
                             errorMessage.setText(messageError);
-                            openMyNotes(register,login.getText().toString());
+                            openMyNotes(register,login.getText().toString(),password.getText().toString());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -99,13 +108,70 @@ Log.e("URL", getString(R.string.URL));
     }
 
 
-    public void openMyNotes(boolean register,String login) {
+    public void openMyNotes(boolean register,String login,String password) {
         if (register) {
-
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("login",login);
+            editor.putString("password",password);
+            editor.apply();
 
             Intent intent = new Intent(this, MyNotes.class);
             intent.putExtra("login", this.login.getText().toString());
             startActivity(intent);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_for_main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int idMenu = item.getItemId();
+        switch (idMenu) {
+            case R.id.aboutMe_MenuId:
+                dialog();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public  void  dialog(){
+
+        AlertDialog.Builder builder =new AlertDialog.Builder(ActivityRegisterForm.this);
+       /*  alertdialog.setTitle("alertDialog");
+         alertdialog.setMessage("Проверка");*/
+
+        builder.setTitle("О разработчике")
+                //.setMessage("Мартинкевич Илья")
+                .setMessage(getString(R.string.about))
+                .setCancelable(true)
+
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      /*  Toast toast = Toast.makeText(getApplicationContext(),
+                                "Нажата  кнопка :ДА", Toast.LENGTH_SHORT);
+                        toast.show();*/
+                    }
+                });
+                /*.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Ничего не выбранно ", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });*/
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
 }
