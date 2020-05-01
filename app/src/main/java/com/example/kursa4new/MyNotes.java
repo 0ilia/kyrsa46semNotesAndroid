@@ -395,6 +395,10 @@ Log.e("BBBBB", String.valueOf(updateIndex));
     @Override
     public void onBackPressed() {
         // super.onBackPressed();
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 
     public void openDetailNote(int id, String updatedAt, String createdAt) {
