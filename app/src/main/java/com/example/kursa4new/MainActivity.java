@@ -200,7 +200,7 @@ public  void openMyNotes(boolean register,String login, String password){
 
         builder.setTitle("О разработчике")
                 //.setMessage("Мартинкевич Илья")
-                .setMessage(getString(R.string.about))
+                .setMessage(getString(R.string.myName)+"\n"+getString(R.string.about))
                 .setCancelable(true)
 
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {

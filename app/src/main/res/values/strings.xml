@@ -7,6 +7,7 @@
     <!--<string name="URL">http://10.0.2.2:3005</string>-->
     <string name="URL">https://sequelizerestapi.herokuapp.com</string>
 
+    <string name="myName"><b>Мартинкевич Илья</b></string>
     <string name="about"><i><a href="https://vk.com/il_ia">https://vk.com/il_ia</a></i></string>
 
 </resources>
