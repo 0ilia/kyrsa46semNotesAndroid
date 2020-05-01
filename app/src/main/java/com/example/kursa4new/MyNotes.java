@@ -1,9 +1,12 @@
 package com.example.kursa4new;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -63,8 +66,8 @@ public class MyNotes extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            String s =  response.toString();
-                          //  Log.d("CCCC", s);
+                            String s = response.toString();
+                            //  Log.d("CCCC", s);
                             saveToJSON(s);
                             try {
                                 JSONArray c = response.getJSONArray("notes");
@@ -78,7 +81,7 @@ public class MyNotes extends AppCompatActivity {
                                     updatedAt = jsonObject.getString("updatedAt"); //gets category String
                                     createdAt = jsonObject.getString("createdAt"); //gets category String
                                     Log.d("CCCCID", String.valueOf(createdAt));
-                                    notes.add(new Note(theme, message, id, updatedAt,createdAt));
+                                    notes.add(new Note(theme, message, id, updatedAt, createdAt));
                                     adapter.notifyDataSetChanged();
                                 }
                             } catch (JSONException e) {
@@ -98,52 +101,60 @@ public class MyNotes extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
-        if(data.getStringExtra("function").equals("update")) {
-            int updateIndex = data.getIntExtra("idItem", 0);
-            int id = data.getIntExtra("id", 0);
-            theme = data.getStringExtra("theme");
-            message = data.getStringExtra("message");
-            updatedAt = data.getStringExtra("updatedAt");
+            if (data.getStringExtra("function").equals("update")) {
+                int updateIndex = data.getIntExtra("idItem", 0);
+                int id = data.getIntExtra("id", 0);
+                theme = data.getStringExtra("theme");
+                message = data.getStringExtra("message");
+                updatedAt = data.getStringExtra("updatedAt");
 
-            createdAt = data.getStringExtra("createdAt");
+                createdAt = data.getStringExtra("createdAt");
 
+Log.e("BBBBB", String.valueOf(notes.size()));
+Log.e("BBBBB", String.valueOf(adapter.getItemCount()));
+Log.e("BBBBB", String.valueOf(updateIndex));
 
-            notes.set(updateIndex, new Note(theme, message, id, updatedAt,createdAt));
-            adapter.notifyItemChanged(updateIndex);
+                if (notes.size()-1 == updateIndex) {
+                    notes.add(new Note(theme, message, id, updatedAt, createdAt));
+                    adapter.notifyDataSetChanged();
+
+                }else {
+                    notes.set(updateIndex, new Note(theme, message, id, updatedAt, createdAt));
+                    adapter.notifyItemChanged(updateIndex);
+                }
             /*adapter = new RecyclerViewAdapter(this, notes);
             recyclerView.setAdapter(adapter);*/
 
-        }else if(data.getStringExtra("function").equals("delete")){
-            int removeIndex = data.getIntExtra("idItem", 0);
-            notes.remove(removeIndex);
-           //adapter.notifyItemRemoved(removeIndex);
+            } else if (data.getStringExtra("function").equals("delete")) {
+                int removeIndex = data.getIntExtra("idItem", 0);
+                notes.remove(removeIndex);
+                //adapter.notifyItemRemoved(removeIndex);
 
-            adapter = new RecyclerViewAdapter(this, notes);
-            recyclerView.setAdapter(adapter);
+                adapter = new RecyclerViewAdapter(this, notes);
+                recyclerView.setAdapter(adapter);
 
-            Log.e("DEL", String.valueOf(adapter.getItemCount())+"-"+notes.size());
-        }else if(data.getStringExtra("function").equals("create")) {
+                Log.e("DEL", String.valueOf(adapter.getItemCount()) + "-" + notes.size());
+            } else if (data.getStringExtra("function").equals("create")) {
 
-            int id = data.getIntExtra("id", 0);
-            theme = data.getStringExtra("theme");
-            message = data.getStringExtra("message");
-            updatedAt = data.getStringExtra("updatedAt");
+                int id = data.getIntExtra("id", 0);
+                theme = data.getStringExtra("theme");
+                message = data.getStringExtra("message");
+                updatedAt = data.getStringExtra("updatedAt");
 
-            createdAt = data.getStringExtra("createdAt");
+                createdAt = data.getStringExtra("createdAt");
 
-            notes.add(new Note(theme, message, id, updatedAt,createdAt));
-            adapter.notifyDataSetChanged();
-        }
-        }catch (Exception e){
-            Log.e("Error_onActivityResult",e.getMessage());
+                notes.add(new Note(theme, message, id, updatedAt, createdAt));
+                adapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            Log.e("Error_onActivityResult", e.getMessage());
         }
 //        Log.e("FFFF",data.getStringExtra("name"));
     }
 
-    public  void  saveToJSON(String json){
+    public void saveToJSON(String json) {
         //Save to external storage
 /*
         Log.e("File", String.valueOf(Environment.getExternalStorageDirectory()));
@@ -203,7 +214,7 @@ public class MyNotes extends AppCompatActivity {
     }
 
     File file;
-    String theme, message, login, updatedAt,createdAt;
+    String theme, message, login, updatedAt, createdAt;
     int id;
     ArrayList<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
@@ -216,6 +227,25 @@ public class MyNotes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_notes);
 
+        //load preferences
+
+        //SharedPreferences  sPref = getPreferences(MODE_PRIVATE);
+       /* SharedPreferences sPref = getSharedPreferences("com.example.kursa4new", Context.MODE_PRIVATE);
+        String savedText = sPref.getString("SAVED_TEXT", "");
+        // etText.setText(savedText);
+        Toast.makeText(this, savedText, Toast.LENGTH_SHORT).show();
+
+*/
+
+        /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = preferences.getString("Name", "");
+        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();*/
+        /*if(!name.equalsIgnoreCase(""))
+        {
+            name = name + "  Sethi";  *//* Edit the value here*//*
+        }*/
+
+
         Intent intent = getIntent();
         login = intent.getStringExtra("login");
 
@@ -226,7 +256,7 @@ public class MyNotes extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter(this, notes);
         recyclerView.setAdapter(adapter);
-        mt = new MyTaskGetAllNotes(getString(R.string.URL)+"/getAllNotes/" + login);
+        mt = new MyTaskGetAllNotes(getString(R.string.URL) + "/getAllNotes/" + login);
         mt.execute();
 
         search = findViewById(R.id.edittextSearchId);
@@ -249,9 +279,8 @@ public class MyNotes extends AppCompatActivity {
     }
 
 
-
     private void filter(String text) {
-        if(!text.trim().equals("")) {
+        if (!text.trim().equals("")) {
             ArrayList<Note> filterList = new ArrayList<>();
             for (Note item : notes) {
                 if (item.getTheme().toLowerCase().contains(text.toLowerCase()) ||
@@ -262,8 +291,7 @@ public class MyNotes extends AppCompatActivity {
             }
             filterAdapter = new RecyclerViewAdapter(this, filterList);
             recyclerView.setAdapter(filterAdapter);
-        }
-        else {
+        } else {
             adapter = new RecyclerViewAdapter(this, notes);
             recyclerView.setAdapter(adapter);
         }
@@ -282,24 +310,28 @@ public class MyNotes extends AppCompatActivity {
             return o1.getTheme().toLowerCase().compareTo(o2.getTheme().toLowerCase());
         }
     }
+
     public class CustomComparatorSortByAlphabetZ_A implements Comparator<Note> {
         @Override
         public int compare(Note o1, Note o2) {
             return o2.getTheme().toLowerCase().compareTo(o1.getTheme().toLowerCase());
         }
     }
+
     public class CustomComparatorSortDateUpdate implements Comparator<Note> {
         @Override
         public int compare(Note o1, Note o2) {
             return o2.getDateUpdate().compareTo(o1.getDateUpdate());
         }
     }
+
     public class CustomComparatorSortByDateCreate implements Comparator<Note> {
         @Override
         public int compare(Note o1, Note o2) {
             return o2.getDateCreate().compareTo(o1.getDateCreate());
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -331,8 +363,17 @@ public class MyNotes extends AppCompatActivity {
                 return true;
 
             case R.id.saveToJSONMenuItem_ID:
-                mt = new MyTaskGetAllNotes(getString(R.string.URL)+"/getAllNotes/" + login);
+                mt = new MyTaskGetAllNotes(getString(R.string.URL) + "/getAllNotes/" + login);
                 mt.execute();
+                return true;
+            case R.id.exitToAppMenuItem_ID:
+                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = mySPrefs.edit();
+                editor.remove("login");
+                editor.remove("password");
+                editor.apply();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 return true;
 
         }
@@ -351,7 +392,12 @@ public class MyNotes extends AppCompatActivity {
 
     }
 
-    public void openDetailNote(int id, String updatedAt,String createdAt) {
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed();
+    }
+
+    public void openDetailNote(int id, String updatedAt, String createdAt) {
 
    /*     notes.add(new Note(theme, message, id, updatedAt,createdAt));
         adapter.notifyDataSetChanged();*/
@@ -363,7 +409,7 @@ public class MyNotes extends AppCompatActivity {
         intent.putExtra("createdAt", createdAt);
         intent.putExtra("id", id);
         intent.putExtra("idItem", adapter.getItemCount() - 1);*/
-      //  startActivity(intent);
+        //  startActivity(intent);
         startActivityForResult(intent, 1);
     }
 

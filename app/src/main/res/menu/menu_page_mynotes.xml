@@ -42,8 +42,13 @@
       <item
           android:id="@+id/saveToJSONMenuItem_ID"
           android:icon="@drawable/save"
-          android:title="Сохранить в json обновить"
+          android:title="Сохранить в json и обновить"
           app:showAsAction="never"/>
+        <item
+            android:id="@+id/exitToAppMenuItem_ID"
+            android:icon="@drawable/exit_to_app"
+            android:title="Выйти"
+            app:showAsAction="never"/>
 
     </menu>
   </item>
