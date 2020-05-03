@@ -16,7 +16,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Логин"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:maxLength="100"
+        />
 
 
         <EditText
@@ -25,7 +27,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Пароль"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:maxLength="140"
+            />
 
         <Button
             android:id="@+id/loginButtonId_auth"

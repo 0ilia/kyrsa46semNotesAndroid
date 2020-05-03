@@ -115,7 +115,7 @@ public class DetailPageNote extends AppCompatActivity {
                                 theme = response.getString("theme");
                                 message = response.getString("message");
                                 function = "create";
-                                //resMess.setText(response.getString("create"));
+                                resMess.setText(response.getString("create"));
                                 backPage();
                             } catch (JSONException e) {
                                 e.printStackTrace();

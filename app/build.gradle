@@ -44,4 +44,7 @@ dependencies {
     //cardview
     implementation 'com.android.support:cardview-v7:28.0.0'
     //implementation project(':mysql-connector-java-5.1.45-bin')
+
+    //emoji
+    implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'
 }

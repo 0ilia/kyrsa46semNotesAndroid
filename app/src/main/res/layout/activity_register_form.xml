@@ -24,7 +24,7 @@
         android:ems="10"
         android:hint="Логин"
         android:inputType="textPersonName"
-        android:maxLength="15" />
+        android:maxLength="100" />
 
 
     <EditText
@@ -32,21 +32,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="e-mail"
-        android:inputType="textPersonName" />
+        android:maxLength="140"
+        android:inputType="textPersonName"
+        />
 
     <EditText
         android:id="@+id/passwordPlainTextId_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Пароль"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:maxLength="140"/>
 
     <EditText
         android:id="@+id/confirmPasswordPlainTextId_reg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Повторите пароль"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:maxLength="140"/>
 
     <Button
         android:id="@+id/registerButtonId_reg"
