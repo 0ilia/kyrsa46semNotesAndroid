@@ -46,7 +46,9 @@ public class ActivityRegisterForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_form);
-/*
+
+        setTitle("Регистрация");
+        /*
          linkVk =  findViewById(R.id.about_TextVieew_Id);
         linkVk.setMovementMethod(LinkMovementMethod.getInstance());*/
 

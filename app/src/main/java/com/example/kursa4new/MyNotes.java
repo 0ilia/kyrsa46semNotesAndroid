@@ -112,13 +112,13 @@ public class MyNotes extends AppCompatActivity {
 
                 createdAt = data.getStringExtra("createdAt");
 
-Log.e("BBBBB", String.valueOf(notes.size()));
-Log.e("BBBBB", String.valueOf(adapter.getItemCount()));
-Log.e("BBBBB", String.valueOf(updateIndex));
+                Log.e("BBBBB", String.valueOf(notes.size()));
+                Log.e("BBBBB", String.valueOf(adapter.getItemCount()));
+                Log.e("BBBBB", String.valueOf(updateIndex));
 
 
-                    notes.set(updateIndex, new Note(theme, message, id, updatedAt, createdAt));
-                    adapter.notifyItemChanged(updateIndex);
+                notes.set(updateIndex, new Note(theme, message, id, updatedAt, createdAt));
+                adapter.notifyItemChanged(updateIndex);
             /*adapter = new RecyclerViewAdapter(this, notes);
             recyclerView.setAdapter(adapter);*/
 
@@ -200,9 +200,9 @@ Log.e("BBBBB", String.valueOf(updateIndex));
             bw.close();
             fw.close();
 
-            Toast toast = Toast.makeText(getApplicationContext(),
+            /*Toast toast = Toast.makeText(getApplicationContext(),
                     "Сохраннено в json", Toast.LENGTH_SHORT);
-            toast.show();
+            toast.show();*/
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -221,6 +221,7 @@ Log.e("BBBBB", String.valueOf(updateIndex));
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_notes);
+
 
         //load preferences
 
@@ -244,6 +245,7 @@ Log.e("BBBBB", String.valueOf(updateIndex));
         Intent intent = getIntent();
         login = intent.getStringExtra("login");
 
+        setTitle(login);
 
         recyclerView = findViewById(R.id.RecyclerViewId);
         //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

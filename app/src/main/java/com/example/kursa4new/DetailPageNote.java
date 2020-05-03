@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.renderscript.Sampler;
@@ -35,6 +36,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,7 +47,7 @@ import static com.android.volley.Request.Method.PUT;
 
 public class DetailPageNote extends AppCompatActivity {
 
-    String theme = "", message = "", updatedAt = "", createdAt = "",login,function;
+    String theme = "", message = "", updatedAt = "", createdAt = "", login, function;
     int id = -1, idItem;
     EditText themeEditText, messageEditText;
     TextView resMess;
@@ -65,6 +67,7 @@ public class DetailPageNote extends AppCompatActivity {
         theme = intent.getStringExtra("theme");
         message = intent.getStringExtra("message");
         login = intent.getStringExtra("login");
+        setTitle(login);
         //    updatedAt = intent.getStringExtra("updatedAt");
         updatedAt = "";
         createdAt = intent.getStringExtra("createdAt");
@@ -82,7 +85,7 @@ public class DetailPageNote extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-      //  super.onBackPressed();
+        //  super.onBackPressed();
         backPage();
     }
 
@@ -101,7 +104,7 @@ public class DetailPageNote extends AppCompatActivity {
                 e.printStackTrace();
             }
             // Enter the correct url for your api service site
-            String url = getString(R.string.URL)+"/addNote/";
+            String url = getString(R.string.URL) + "/addNote/";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -143,7 +146,7 @@ public class DetailPageNote extends AppCompatActivity {
                 e.printStackTrace();
             }
             // Enter the correct url for your api service site
-            String url = getString(R.string.URL)+"/updateNote/" + id;
+            String url = getString(R.string.URL) + "/updateNote/" + id;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(PUT, url, object,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -174,10 +177,10 @@ public class DetailPageNote extends AppCompatActivity {
     }
 
     public void deleteNotes() {
-        if (id!=-1) {
+        if (id != -1) {
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             JSONObject object = new JSONObject();
-            String url = getString(R.string.URL)+"/deleteNote/" + id;
+            String url = getString(R.string.URL) + "/deleteNote/" + id;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(DELETE, url, object,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -213,7 +216,7 @@ public class DetailPageNote extends AppCompatActivity {
         return true;
     }
 
-    public  void  backPage(){
+    public void backPage() {
 
         Intent intent = new Intent();
         intent.putExtra("function", function);
@@ -239,10 +242,10 @@ public class DetailPageNote extends AppCompatActivity {
             case R.id.saveNoteMenuId:
                 saveNotes();
                 return true;
-            case  R.id.deleteNoteMenuId:
+            case R.id.deleteNoteMenuId:
                 deleteNotes();
                 return true;
-            case  R.id.notificationNoteMenuId:
+            case R.id.notificationNoteMenuId:
                 createNotification();
                 return true;
         }
@@ -251,7 +254,9 @@ public class DetailPageNote extends AppCompatActivity {
 
 
     public void createNotification() {
-
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Log.e("DDDD", String.valueOf(dateAndTime.getTimeInMillis()));
         Log.e("DDDD1", String.valueOf(System.currentTimeMillis()));
@@ -260,7 +265,12 @@ public class DetailPageNote extends AppCompatActivity {
                 .setTicker(themeEditText.getText().toString())
                 .setSmallIcon(R.drawable.notificationnote)
                 .setContentTitle(themeEditText.getText().toString())
-                .setContentText(messageEditText.getText().toString());
+                .setContentText(messageEditText.getText().toString())
+                .setContentIntent(resultPendingIntent)
+                .setColor(R.color.red)
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(messageEditText.getText().toString()))
+                .setLights(23, 300, 100); // To change Light Colors;
 
         Notification notification = builder.build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
