@@ -258,7 +258,6 @@ public class MyNotes extends AppCompatActivity {
 
         search = findViewById(R.id.edittextSearchId);
 
-        search = findViewById(R.id.edittextSearchId);
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -3,12 +3,15 @@ package com.example.kursa4new;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,9 +37,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         view = mInflater.inflate(R.layout.cardiew_note_item, parent, false);
         return new MyViewHolder(view);
     }
-
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
         try {
 
             holder.theme_note_Id.setText(mData.get(position).getTheme());
@@ -45,8 +54,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, DetailPageNote.class);
+                    Intent intent;
+                    if(!isOnline()){
+                         intent = new Intent(mContext, DetailPageNoteOffline.class);
 
+                    }else {
+                         intent = new Intent(mContext, DetailPageNote.class);
+
+                    }
                     // passing data to the book activity
                     Log.e("EEEEEE",mData.get(position).getTheme());
                     Log.e("EEEEEE", String.valueOf(position));

@@ -9,8 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,14 +26,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Collections;
-
-import static com.android.volley.Request.Method.POST;
 
 public class MainActivity extends AppCompatActivity {
     EditText login, password;
@@ -50,33 +43,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(!isOnline()){
-
             Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
-        }
 
-
-        errorMessage = findViewById(R.id.errorMessageLoginForm);
-
-        login = findViewById(R.id.loginPlainTextId_auth);
-        password = findViewById(R.id.passwordPlainTextId_auth);
-        password.setTransformationMethod(new LockerPasswordTransformationMethod());//звёздочки
-
-
-         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(!preferences.getString("login", "").equals("") &&
+            Intent intent = new Intent(this, MyNotesOffline.class);
+            startActivity(intent);
+            //return;
+        }else if(!preferences.getString("login", "").equals("") &&
                 !preferences.getString("password", "").equals("")){
 
             Intent intent = new Intent(this, MyNotes.class);
             intent.putExtra("login", preferences.getString("login", ""));
             startActivity(intent);
-
         }
+
+        errorMessage = findViewById(R.id.errorMessageLoginForm);
+        login = findViewById(R.id.loginPlainTextId_auth);
+        password = findViewById(R.id.passwordPlainTextId_auth);
+        password.setTransformationMethod(new LockerPasswordTransformationMethod());//звёздочки
 
     }
 
-    @Override
+   /* @Override
     protected void onResume() {
         super.onResume();
 
@@ -88,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
-    }
+    }*/
 
     public void loginButtonClick_auth(View view) {
 

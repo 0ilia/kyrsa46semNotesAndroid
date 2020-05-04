@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginRight="20dp"
+    android:gravity="top"
+    android:orientation="vertical"
+    tools:context=".DetailPageNoteOffline">
+
+    <EditText
+        android:id="@+id/theme_Note_EditText_IDOffline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Название"
+        android:inputType="textPersonName"
+        android:maxLength="224"
+        />
+
+
+    <EditText
+        android:id="@+id/message_Note_EditText_IDOffline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Текст"
+        android:inputType="textMultiLine"
+        android:maxLines="7"
+        android:maxLength="224"
+        />
+
+    <TextView
+        android:id="@+id/resultMessageForDetailPageOffline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:textStyle="italic"
+        />
+
+</LinearLayout>

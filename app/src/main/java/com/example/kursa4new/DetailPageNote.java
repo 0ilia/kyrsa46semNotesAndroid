@@ -254,9 +254,9 @@ public class DetailPageNote extends AppCompatActivity {
 
 
     public void createNotification() {
-        Intent resultIntent = new Intent(this, MainActivity.class);
+   /*     Intent resultIntent = new Intent(this, MainActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT);*/
 
         Log.e("DDDD", String.valueOf(dateAndTime.getTimeInMillis()));
         Log.e("DDDD1", String.valueOf(System.currentTimeMillis()));
@@ -266,7 +266,7 @@ public class DetailPageNote extends AppCompatActivity {
                 .setSmallIcon(R.drawable.notificationnote)
                 .setContentTitle(themeEditText.getText().toString())
                 .setContentText(messageEditText.getText().toString())
-                .setContentIntent(resultPendingIntent)
+              /*  .setContentIntent(resultPendingIntent)*/
                 .setColor(R.color.red)
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(messageEditText.getText().toString()))

@@ -81,7 +81,7 @@ Log.e("URL", getString(R.string.URL));
             e.printStackTrace();
         }
         // Enter the correct url for your api service site
-        String url =getString(R.string.URL)+"/addUser/";
+        String url =getString(R.string.URL)+"/addUser";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override

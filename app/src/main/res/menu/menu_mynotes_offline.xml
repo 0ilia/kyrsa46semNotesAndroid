@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/addNotesMenu_offline"
+        android:icon="@drawable/add_notes"
+        android:title="Добавить"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:icon="@drawable/sort"
+        android:orderInCategory="303"
+        android:title="Settings"
+        app:showAsAction="ifRoom">
+        <menu>
+
+            <item
+                android:id="@+id/sortByDateCreate_MenuItemID_offline"
+                android:title="Сортировка по дате создания"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/sortByDateUpdate_MenuItemID_offline"
+                android:title="Сортировка по дате обновления"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/SortByAlphabetA_ZID_offline"
+                android:icon="@drawable/sort_a_z"
+                android:title="А-Я"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/SortByAlphabetZ_AID_offline"
+                android:icon="@drawable/sort_z_a"
+                android:title="Я-А"
+                app:showAsAction="never"/>
+
+
+
+        </menu>
+    </item>
+
+
+</menu>
