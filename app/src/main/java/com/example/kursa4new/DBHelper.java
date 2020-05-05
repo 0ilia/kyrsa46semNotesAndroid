@@ -19,6 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String _MESSAGE = "message";
     public static final String _UNIX_TIMECreate = "unix_timeCreate";
     public static final String _UNIX_TIMEUpdate = "unix_timeUpdate";
+    public static final String _STATUS = "status";
 
 
     public DBHelper(@Nullable Context context/*, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version*/) {
@@ -32,7 +33,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 + _THEME + " text,"
                 + _MESSAGE + " text,"
                 + _UNIX_TIMECreate + " text,"
-                + _UNIX_TIMEUpdate + " text )");
+                + _UNIX_TIMEUpdate + " text,"
+                + _STATUS + " text )");
         //CREATE VIEW add_note_view AS SELECT * FROM notes
         //db.execSQL("create VIEW  "+ VIEW + "as SELECT * FROM notes ");
 

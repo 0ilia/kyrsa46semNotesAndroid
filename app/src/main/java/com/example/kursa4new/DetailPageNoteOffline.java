@@ -122,6 +122,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
     cv.put(DBHelper._MESSAGE, messageEditText.getText().toString());
     cv.put(DBHelper._UNIX_TIMECreate, System.currentTimeMillis());
     cv.put(DBHelper._UNIX_TIMEUpdate, System.currentTimeMillis());
+    cv.put(DBHelper._STATUS, "NoAdd");
     database.insert(DBHelper.TABLE_NAME, null, cv);
 
     long count = DatabaseUtils.queryNumEntries(database, DBHelper.TABLE_NAME);

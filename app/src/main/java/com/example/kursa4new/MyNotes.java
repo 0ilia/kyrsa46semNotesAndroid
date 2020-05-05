@@ -1,8 +1,11 @@
 package com.example.kursa4new;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,58 +51,51 @@ import static com.android.volley.Request.Method.POST;
 
 
 public class MyNotes extends AppCompatActivity {
-    class MyTaskGetAllNotes extends AsyncTask<Void, Void, Void> {
-        String url;
 
-        MyTaskGetAllNotes(String url) {
-            this.url = url;
-        }
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            notes.clear();
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            JSONObject object = new JSONObject();
-            // Enter the correct url for your api service site
-            //String url = "http://10.0.2.2:3005/getAllNotes/" + login;
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            String s = response.toString();
-                            //  Log.d("CCCC", s);
-                            saveToJSON(s);
-                            try {
-                                JSONArray c = response.getJSONArray("notes");
-                                for (int i = 0; i < c.length(); i++) {
+
+    public  void getAllNotes(){
+        notes.clear();
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        JSONObject object = new JSONObject();
+        // Enter the correct url for your api service site
+        String url = getString(R.string.URL) + "/getAllNotes/" + login;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String s = response.toString();
+                        //  Log.d("CCCC", s);
+                        saveToJSON(s);
+                        try {
+                            JSONArray c = response.getJSONArray("notes");
+                            for (int i = 0; i < c.length(); i++) {
 //populates the array, in your case, jsonarray size = 4
-                                    JSONObject jsonObject = c.getJSONObject(i);
+                                JSONObject jsonObject = c.getJSONObject(i);
 
-                                    id = jsonObject.getInt("id"); //gets category String
-                                    theme = jsonObject.getString("theme"); //gets category String
-                                    message = jsonObject.getString("message"); //gets category String
-                                    updatedAt = jsonObject.getString("updatedAt"); //gets category String
-                                    createdAt = jsonObject.getString("createdAt"); //gets category String
-                                    Log.d("CCCCID", String.valueOf(createdAt));
-                                    notes.add(new Note(theme, message, id, updatedAt, createdAt));
-                                    adapter.notifyDataSetChanged();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                id = jsonObject.getInt("id"); //gets category String
+                                theme = jsonObject.getString("theme"); //gets category String
+                                message = jsonObject.getString("message"); //gets category String
+                                updatedAt = jsonObject.getString("updatedAt"); //gets category String
+                                createdAt = jsonObject.getString("createdAt"); //gets category String
+                                unix_time = jsonObject.getString("unix_time"); //gets category String
+                            //    Log.d("CCCCID", String.valueOf(unix_timeArray.get(i)));
+                                notes.add(new Note(theme, message, id, updatedAt, createdAt));
+                                adapter.notifyDataSetChanged();
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
+                    }
 
-                    }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
-            requestQueue.add(jsonObjectRequest);
-            return null;
-        }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
@@ -140,7 +136,7 @@ public class MyNotes extends AppCompatActivity {
 
                 createdAt = data.getStringExtra("createdAt");
 
-                notes.add(new Note(theme, message, id, updatedAt, createdAt));
+                notes.add(0, new Note(theme, message, id, updatedAt, createdAt));
                 adapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -208,13 +204,16 @@ public class MyNotes extends AppCompatActivity {
         }
     }
 
+    SQLiteDatabase database;
+    ContentValues cv = new ContentValues();
+    DBHelper dbHelper = new DBHelper(this);
     File file;
-    String theme, message, login, updatedAt, createdAt;
+    String theme, message, login, updatedAt, createdAt, unix_time;
     int id;
     ArrayList<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter, filterAdapter;
-    MyTaskGetAllNotes mt;
+
     EditText search;
 
     @Override
@@ -222,7 +221,7 @@ public class MyNotes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_notes);
 
-
+        database = dbHelper.getWritableDatabase();
         //load preferences
 
         //SharedPreferences  sPref = getPreferences(MODE_PRIVATE);
@@ -253,8 +252,7 @@ public class MyNotes extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter(this, notes);
         recyclerView.setAdapter(adapter);
-        mt = new MyTaskGetAllNotes(getString(R.string.URL) + "/getAllNotes/" + login);
-        mt.execute();
+        getAllNotes();
 
         search = findViewById(R.id.edittextSearchId);
 
@@ -359,8 +357,7 @@ public class MyNotes extends AppCompatActivity {
                 return true;
 
             case R.id.saveToJSONMenuItem_ID:
-                mt = new MyTaskGetAllNotes(getString(R.string.URL) + "/getAllNotes/" + login);
-                mt.execute();
+                getAllNotes();
                 return true;
             case R.id.exitToAppMenuItem_ID:
                 SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -371,11 +368,69 @@ public class MyNotes extends AppCompatActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.synchronizationMenuItem_ID:
+                synchronizationlocaldb();
+                return true;
 
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void synchronizationlocaldb() {
+
+          Cursor key = database.rawQuery("SELECT * from " + DBHelper.TABLE_NAME + " where "+DBHelper._STATUS + " = 'NoAdd' ;", null);
+        if (key.moveToFirst()) {
+            do {
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                JSONObject object = new JSONObject();
+                try {
+                    //input your API parameters
+                    object.put("login", login);
+                    object.put("theme", key.getString(1));
+                    object.put("message",key.getString(2));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Enter the correct url for your api service site
+                String url = getString(R.string.URL) + "/addNote/";
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                Log.e("SSSSS", response.toString());
+                                try {
+                                    id = response.getInt("id");
+                                    updatedAt = response.getString("updatedAt");
+                                    createdAt = response.getString("createdAt");
+                                    theme = response.getString("theme");
+                                    message = response.getString("message");
+                                    notes.add(0, new Note(theme,message,id,updatedAt,createdAt));
+                                    adapter.notifyDataSetChanged();
+
+                                    cv.put("status", "Add");
+                                    database.update(DBHelper.TABLE_NAME, cv, "status = ?",
+                                            new String[]{"NoAdd"});
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+                requestQueue.add(jsonObjectRequest);
+
+            }
+            while (key.moveToNext());
+            key.close();
+        }
+
+    }
 
     void addNote() {
 
@@ -395,22 +450,6 @@ public class MyNotes extends AppCompatActivity {
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
-    }
-
-    public void openDetailNote(int id, String updatedAt, String createdAt) {
-
-   /*     notes.add(new Note(theme, message, id, updatedAt,createdAt));
-        adapter.notifyDataSetChanged();*/
-
-        Intent intent = new Intent(this, DetailPageNote.class);
-       /* intent.putExtra("theme", "");
-        intent.putExtra("message", "");
-        intent.putExtra("updatedAt", updatedAt);
-        intent.putExtra("createdAt", createdAt);
-        intent.putExtra("id", id);
-        intent.putExtra("idItem", adapter.getItemCount() - 1);*/
-        //  startActivity(intent);
-        startActivityForResult(intent, 1);
     }
 
 

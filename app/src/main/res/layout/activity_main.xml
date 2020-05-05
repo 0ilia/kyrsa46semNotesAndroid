@@ -39,27 +39,23 @@
             android:text="Войти"
             android:textAllCaps="false" />
 
-    <LinearLayout
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right"
-        >
-
-        <TextView
+        <Button
             android:onClick="registerTextViewClick_auth"
             android:id="@+id/registerTextViewId_auth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/registration"
+            android:text="Зарегистрироваться"
             android:textAllCaps="false"
-            android:textColor="@color/design_default_color_secondary_variant"
-
-            android:textStyle="italic"
-
         />
-    </LinearLayout>
+   <!-- <Button
+        android:onClick="gotoOffline_avtivityClick_auth"
+        android:id="@+id/offlineButtonId_auth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Автономный режим работы"
+        android:textAllCaps="false"
+        />-->
     <LinearLayout
 
         android:layout_width="wrap_content"

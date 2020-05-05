@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MyNotesOffline.class);
             startActivity(intent);
             //return;
-        }else if(!preferences.getString("login", "").equals("") &&
+        }
+        else if(!preferences.getString("login", "").equals("") &&
                 !preferences.getString("password", "").equals("")){
 
             Intent intent = new Intent(this, MyNotes.class);
@@ -211,6 +212,10 @@ public  void openMyNotes(boolean register,String login, String password){
                 });*/
         AlertDialog alert = builder.create();
         alert.show();
+
+    }
+
+    public void gotoOffline_avtivityClick_auth(View view) {
 
     }
 }

@@ -54,7 +54,7 @@ public class MyNotesOffline extends AppCompatActivity {
     DBHelper dbHelper = new DBHelper(this);
 
     public void getAllNotes(){
-        Cursor key = database.rawQuery("SELECT * from " + DBHelper.TABLE_NAME + ";", null);
+        Cursor key = database.rawQuery("SELECT * from " + DBHelper.TABLE_NAME + " order by "+DBHelper._UNIX_TIMECreate+" desc ;", null);
      //   String keyValue = "";
         if (key.moveToFirst()) {
             do {
@@ -200,8 +200,9 @@ public class MyNotesOffline extends AppCompatActivity {
 
                 createdAt = data.getStringExtra("createdAt");
 
-                notes.add(new Note(theme, message, id, updatedAt, createdAt));
+                notes.add(0,new Note(theme, message, id, updatedAt, createdAt));
                 adapter.notifyDataSetChanged();
+
             }
         } catch (Exception e) {
             Log.e("Error_onActivityResult", e.getMessage());
@@ -256,11 +257,11 @@ public class MyNotesOffline extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
-        Intent startMain = new Intent(Intent.ACTION_MAIN);
+         super.onBackPressed();
+        /*Intent startMain = new Intent(Intent.ACTION_MAIN);
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(startMain);
+        startActivity(startMain);*/
     }
 
 

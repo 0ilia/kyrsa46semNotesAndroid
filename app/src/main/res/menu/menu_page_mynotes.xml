@@ -44,6 +44,12 @@
           android:icon="@drawable/save"
           android:title="Сохранить в json и обновить"
           app:showAsAction="never"/>
+      <item
+          android:id="@+id/synchronizationMenuItem_ID"
+          android:icon="@drawable/ic_sync_black_24dp"
+          android:title="Синхронизация с локальной бд"
+          app:showAsAction="never"/>
+
         <item
             android:id="@+id/exitToAppMenuItem_ID"
             android:icon="@drawable/exit_to_app"
