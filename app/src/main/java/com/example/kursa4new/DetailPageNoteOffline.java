@@ -38,6 +38,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
     ContentValues cv = new ContentValues();
     SQLiteDatabase database;
     DBHelper dbHelper = new DBHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         themeEditText.setText(theme);
         messageEditText.setText(message);
     }
+
     @Override
     public void onBackPressed() {
         //  super.onBackPressed();
@@ -86,6 +88,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         setResult(1, intent);
         finish();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -109,55 +112,82 @@ public class DetailPageNoteOffline extends AppCompatActivity {
             case R.id.notificationNoteMenuId:
                 createNotification();
                 return true;
+            case R.id.saveNoteMenuId_asNew:
+                saveNotes_asNew();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-   public void saveNotes() {
+
+    public void saveNotes_asNew() {
+        if (id == -1) {
+            creatNote();
+        }else {
+            if (!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals("")) {
+
+                cv.put("theme", themeEditText.getText().toString());
+                cv.put("message", messageEditText.getText().toString());
+                cv.put("status", "NoAdd");
+                updatedAt = String.valueOf(System.currentTimeMillis());
+
+                cv.put("unix_timeUpdate", updatedAt);
+                database.update(DBHelper.TABLE_NAME, cv, "id = ?",
+                        new String[]{String.valueOf(id)});
+                function = "update";
+                theme = themeEditText.getText().toString();
+                message = messageEditText.getText().toString();
+            }
+        }
+
+    }
+
+    public void saveNotes() {
 //crate Note
-       if (id == -1) {
+        if (id == -1) {
+            creatNote();
+        }
+        //update
+        else {
+            if (!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals("")) {
 
+                cv.put("theme", themeEditText.getText().toString());
+                cv.put("message", messageEditText.getText().toString());
+                updatedAt = String.valueOf(System.currentTimeMillis());
 
-           if(!themeEditText.getText().toString().equals("")|| !messageEditText.getText().toString().equals("")) {
-    cv.put(DBHelper._THEME, themeEditText.getText().toString());
-    cv.put(DBHelper._MESSAGE, messageEditText.getText().toString());
-    cv.put(DBHelper._UNIX_TIMECreate, System.currentTimeMillis());
-    cv.put(DBHelper._UNIX_TIMEUpdate, System.currentTimeMillis());
-    cv.put(DBHelper._STATUS, "NoAdd");
-    database.insert(DBHelper.TABLE_NAME, null, cv);
+                cv.put("unix_timeUpdate", updatedAt);
+                database.update(DBHelper.TABLE_NAME, cv, "id = ?",
+                        new String[]{String.valueOf(id)});
+                function = "update";
+                theme = themeEditText.getText().toString();
+                message = messageEditText.getText().toString();
+            }
+        }
+    }
 
-    long count = DatabaseUtils.queryNumEntries(database, DBHelper.TABLE_NAME);
-    database.close();
-    Log.e("Count<A", String.valueOf(count));
+    public void creatNote() {
 
-    id = (int) count;
-    updatedAt = String.valueOf(System.currentTimeMillis());
-    createdAt = String.valueOf(System.currentTimeMillis());
-    theme = themeEditText.getText().toString();
-    message = messageEditText.getText().toString();
-    function = "create";
+        if (!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals("")) {
+            cv.put(DBHelper._THEME, themeEditText.getText().toString());
+            cv.put(DBHelper._MESSAGE, messageEditText.getText().toString());
+            cv.put(DBHelper._UNIX_TIMECreate, System.currentTimeMillis());
+            cv.put(DBHelper._UNIX_TIMEUpdate, System.currentTimeMillis());
+            cv.put(DBHelper._STATUS, "NoAdd");
+            database.insert(DBHelper.TABLE_NAME, null, cv);
 
-    backPage();
-}
-       }
-       //update
-       else {
-           if(!themeEditText.getText().toString().equals("")|| !messageEditText.getText().toString().equals("")) {
+            long count = DatabaseUtils.queryNumEntries(database, DBHelper.TABLE_NAME);
+            database.close();
+            Log.e("Count<A", String.valueOf(count));
 
-               cv.put("theme", themeEditText.getText().toString());
-               cv.put("message", messageEditText.getText().toString());
-               updatedAt = String.valueOf(System.currentTimeMillis());
+            id = (int) count;
+            updatedAt = String.valueOf(System.currentTimeMillis());
+            createdAt = String.valueOf(System.currentTimeMillis());
+            theme = themeEditText.getText().toString();
+            message = messageEditText.getText().toString();
+            function = "create";
 
-               cv.put("unix_timeUpdate",updatedAt);
-               database.update(DBHelper.TABLE_NAME, cv, "id = ?",
-                       new String[]{String.valueOf(id)});
-               function = "update";
-               theme = themeEditText.getText().toString();
-               message = messageEditText.getText().toString();
-           }
-
-
-       }
-   }
+            backPage();
+        }
+    }
 
     public void deleteNotes() {
         if (id != -1) {

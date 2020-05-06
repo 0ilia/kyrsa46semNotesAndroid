@@ -4,22 +4,28 @@
     <item
         android:id="@+id/saveNoteMenuId"
         android:icon="@drawable/save_white"
-        android:title="Back"
+        android:title="Сохранить"
+        app:showAsAction="always" />
+    <item
+
+        android:id="@+id/saveNoteMenuId_asNew"
+        android:icon="@drawable/save"
+        android:title="Сохранить как новую"
         app:showAsAction="always" />
     <item
         android:id="@+id/deleteNoteMenuId"
         android:icon="@drawable/delete_white"
-        android:title="Back"
+        android:title="Удалить"
         app:showAsAction="always" />
     <item
         android:id="@+id/notificationNoteMenuId"
         android:icon="@drawable/notification_white"
-        android:title="Back"
+        android:title="Создать уведомление"
         app:showAsAction="always"
        />
     <item
         android:id="@+id/back_in_allNotes_id"
         android:icon="@drawable/back"
-        android:title="Back"
+        android:title="Назад"
         app:showAsAction="always" />
 </menu>

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -52,9 +54,21 @@ import static com.android.volley.Request.Method.POST;
 
 public class MyNotes extends AppCompatActivity {
 
-
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 
     public  void getAllNotes(){
+        if(isOnline()){
+            Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, MyNotesOffline.class);
+            startActivity(intent);
+            //return;
+        }
         notes.clear();
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         JSONObject object = new JSONObject();
