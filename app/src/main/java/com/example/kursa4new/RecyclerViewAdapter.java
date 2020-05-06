@@ -3,8 +3,10 @@ package com.example.kursa4new;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,15 +54,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.message_node_Id.setText(mData.get(position).getMessage());
 //        holder.idNote_Id.setText(mData.get(position).getId());
             holder.cardView.setOnClickListener(new View.OnClickListener() {
+                SharedPreferences preferences =PreferenceManager.getDefaultSharedPreferences(mContext);
                 @Override
                 public void onClick(View v) {
-                    Intent intent;
-                    if(!isOnline()){
+
+                     Log.e("CEEEEEE", String.valueOf(preferences.getString("checkInternet", "").equals("")));
+                    Intent intent ;
+                    if(preferences.getString("checkInternet", "").equals("false")){
                          intent = new Intent(mContext, DetailPageNoteOffline.class);
-
-                    }else {
+                    }else if(preferences.getString("checkInternet", "").equals("true")) {
                          intent = new Intent(mContext, DetailPageNote.class);
-
+                    }else{
+                        intent = new Intent(mContext, MainActivity.class);
                     }
                     // passing data to the book activity
                     Log.e("EEEEEE",mData.get(position).getTheme());

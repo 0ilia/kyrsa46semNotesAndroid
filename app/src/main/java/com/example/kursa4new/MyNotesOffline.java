@@ -240,6 +240,14 @@ public class MyNotesOffline extends AppCompatActivity {
                 adapter = new RecyclerViewAdapter(this, notes);
                 recyclerView.setAdapter(adapter);
                 return true;
+            case R.id.gotoMain:
+                SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = mySPrefs.edit();
+                editor.remove("checkInternet");
+                editor.apply();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return true;
 
         }
         return super.onOptionsItemSelected(item);
@@ -257,6 +265,12 @@ public class MyNotesOffline extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mySPrefs.edit();
+        editor.remove("checkInternet");
+        editor.apply();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
          super.onBackPressed();
         /*Intent startMain = new Intent(Intent.ACTION_MAIN);
         startMain.addCategory(Intent.CATEGORY_HOME);

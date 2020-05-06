@@ -35,7 +35,11 @@
                 android:title="Я-А"
                 app:showAsAction="never"/>
 
-
+            <item
+                android:id="@+id/gotoMain"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="На главную"
+                app:showAsAction="never"/>
 
         </menu>
     </item>

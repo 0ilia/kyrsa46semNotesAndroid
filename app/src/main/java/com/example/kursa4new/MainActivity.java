@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,31 +35,52 @@ public class MainActivity extends AppCompatActivity {
     EditText login, password;
 
     TextView errorMessage;
-    String messageError ="";
+    String messageError = "";
     boolean register = false;
     SharedPreferences preferences;
+    Button offlineButtonPage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        offlineButtonPage = findViewById(R.id.offlineButtonId_auth);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.getString("checkInternet", "").equals("false")) {
+            offlineButtonPage.performClick();
+        } else if (!preferences.getString("login", "").equals("") &&
+                !preferences.getString("password", "").equals("")) {
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            JSONObject object = new JSONObject();
+            String url = getString(R.string.URL) + "/loginUser/" + preferences.getString("login", "") + "/" + preferences.getString("password", "");
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, object,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                messageError = response.getString("messageError");
+                                register = response.getBoolean("register");
+                                errorMessage.setText(messageError);
 
-        if(!isOnline()){
-            Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                                openMyNotes(register, preferences.getString("login", ""), (preferences.getString("password", "")));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
 
-            Intent intent = new Intent(this, MyNotesOffline.class);
-            startActivity(intent);
-            //return;
+                    }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+            requestQueue.add(jsonObjectRequest);
+
         }
-        else if(!preferences.getString("login", "").equals("") &&
-                !preferences.getString("password", "").equals("")){
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
 
-            Intent intent = new Intent(this, MyNotes.class);
-            intent.putExtra("login", preferences.getString("login", ""));
-            startActivity(intent);
-        }
+
 
         errorMessage = findViewById(R.id.errorMessageLoginForm);
         login = findViewById(R.id.loginPlainTextId_auth);
@@ -94,19 +116,19 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }*/
         // Enter the correct url for your api service site
-        String url = getString(R.string.URL)+"/loginUser/"+login.getText().toString()+"/"+password.getText().toString();
+        String url = getString(R.string.URL) + "/loginUser/" + login.getText().toString() + "/" + password.getText().toString();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, object,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("CCCC",response.toString());
+                        Log.d("CCCC", response.toString());
                         try {
 
                             messageError = response.getString("messageError");
                             register = response.getBoolean("register");
                             errorMessage.setText(messageError);
 
-                            openMyNotes(register ,login.getText().toString(),password.getText().toString());
+                            openMyNotes(register, login.getText().toString(), password.getText().toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -119,33 +141,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
-
-
     }
-public  void openMyNotes(boolean register,String login, String password){
-     if(register){
-//
 
-//save to share preferences
-        /* sPref = getPreferences(MODE_PRIVATE);
-         SharedPreferences.Editor ed = sPref.edit();
-         ed.putString("SAVED_TEXT", "etText.getText().toString()");
-         ed.commit();
-         Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();*/
+    public void openMyNotes(boolean register, String login, String password) {
+        if (register) {
 
 
-         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-         SharedPreferences.Editor editor = preferences.edit();
-         editor.putString("login",login);
-         editor.putString("password",password);
-         editor.apply();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("login", login);
+            editor.putString("password", password);
+            editor.putString("checkInternet", "true");
+            editor.apply();
 
 
-         Intent intent = new Intent(this, MyNotes.class);
-         intent.putExtra("login", this.login.getText().toString());
-         startActivity(intent);
-     }
-}
+            Intent intent = new Intent(this, MyNotes.class);
+            intent.putExtra("login", login);
+            startActivity(intent);
+        }
+    }
 
 
     public void registerTextViewClick_auth(View view) {
@@ -183,15 +197,15 @@ public  void openMyNotes(boolean register,String login, String password){
     }
 
 
-    public  void  dialog(){
+    public void dialog() {
 
-        AlertDialog.Builder builder =new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
        /*  alertdialog.setTitle("alertDialog");
          alertdialog.setMessage("Проверка");*/
 
         builder.setTitle("О разработчике")
                 //.setMessage("Мартинкевич Илья")
-                .setMessage(getString(R.string.myName)+"\n"+getString(R.string.about))
+                .setMessage(getString(R.string.myName) + "\n" + getString(R.string.about))
                 .setCancelable(true)
 
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -216,6 +230,12 @@ public  void openMyNotes(boolean register,String login, String password){
     }
 
     public void gotoOffline_avtivityClick_auth(View view) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("checkInternet", "false");
+        editor.apply();
 
+        Intent intent = new Intent(this, MyNotesOffline.class);
+        startActivity(intent);
     }
 }

@@ -92,7 +92,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_for_detaipage, menu);
+        inflater.inflate(R.menu.menu_for_detaipage_offline, menu);
         return true;
     }
 
@@ -194,23 +194,6 @@ public class DetailPageNoteOffline extends AppCompatActivity {
             database.delete(DBHelper.TABLE_NAME, DBHelper._ID + "  = '" + id + "'", null);
             function = "delete";
             openPageAllNote();
-/*
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            JSONObject object = new JSONObject();
-            String url = getString(R.string.URL) + "/deleteNote/" + id;
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(DELETE, url, object,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            function = "delete";
-                            openPageAllNote();
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
-            requestQueue.add(jsonObjectRequest);*/
         }
     }
 

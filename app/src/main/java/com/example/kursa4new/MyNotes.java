@@ -54,62 +54,55 @@ import static com.android.volley.Request.Method.POST;
 
 public class MyNotes extends AppCompatActivity {
 
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
 
-    public  void getAllNotes(){
-        if(isOnline()){
-            Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+    class MyTaskGetAllNotes extends AsyncTask<Void, Void, Void> {
 
-            Intent intent = new Intent(this, MyNotesOffline.class);
-            startActivity(intent);
-            //return;
-        }
-        notes.clear();
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        JSONObject object = new JSONObject();
-        // Enter the correct url for your api service site
-        String url = getString(R.string.URL) + "/getAllNotes/" + login;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        String s = response.toString();
-                        //  Log.d("CCCC", s);
-                        saveToJSON(s);
-                        try {
-                            JSONArray c = response.getJSONArray("notes");
-                            for (int i = 0; i < c.length(); i++) {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            notes.clear();
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            JSONObject object = new JSONObject();
+            // Enter the correct url for your api service site
+            String url = getString(R.string.URL) + "/getAllNotes/" + login;
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(GET, url, object,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            String s = response.toString();
+                            //  Log.d("CCCC", s);
+                            saveToJSON(s);
+                            try {
+                                JSONArray c = response.getJSONArray("notes");
+                                for (int i = 0; i < c.length(); i++) {
 //populates the array, in your case, jsonarray size = 4
-                                JSONObject jsonObject = c.getJSONObject(i);
+                                    JSONObject jsonObject = c.getJSONObject(i);
 
-                                id = jsonObject.getInt("id"); //gets category String
-                                theme = jsonObject.getString("theme"); //gets category String
-                                message = jsonObject.getString("message"); //gets category String
-                                updatedAt = jsonObject.getString("updatedAt"); //gets category String
-                                createdAt = jsonObject.getString("createdAt"); //gets category String
-                                unix_time = jsonObject.getString("unix_time"); //gets category String
-                            //    Log.d("CCCCID", String.valueOf(unix_timeArray.get(i)));
-                                notes.add(new Note(theme, message, id, updatedAt, createdAt));
-                                adapter.notifyDataSetChanged();
+                                    id = jsonObject.getInt("id"); //gets category String
+                                    theme = jsonObject.getString("theme"); //gets category String
+                                    message = jsonObject.getString("message"); //gets category String
+                                    updatedAt = jsonObject.getString("updatedAt"); //gets category String
+                                    createdAt = jsonObject.getString("createdAt"); //gets category String
+                                    //    Log.d("CCCCID", String.valueOf(unix_timeArray.get(i)));
+                                    notes.add(new Note(theme, message, id, updatedAt, createdAt));
+                                    adapter.notifyDataSetChanged();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
 
-                }, new Response.ErrorListener() {
+                    }, new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+            requestQueue.add(jsonObjectRequest);
+            return null;
+        }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
@@ -158,6 +151,7 @@ public class MyNotes extends AppCompatActivity {
         }
 //        Log.e("FFFF",data.getStringExtra("name"));
     }
+
 
     public void saveToJSON(String json) {
         //Save to external storage
@@ -227,7 +221,7 @@ public class MyNotes extends AppCompatActivity {
     ArrayList<Note> notes = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter, filterAdapter;
-
+    MyTaskGetAllNotes mt;
     EditText search;
 
     @Override
@@ -266,7 +260,8 @@ public class MyNotes extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter(this, notes);
         recyclerView.setAdapter(adapter);
-        getAllNotes();
+        mt = new MyTaskGetAllNotes();
+        mt.execute();
 
         search = findViewById(R.id.edittextSearchId);
 
@@ -371,13 +366,15 @@ public class MyNotes extends AppCompatActivity {
                 return true;
 
             case R.id.saveToJSONMenuItem_ID:
-                getAllNotes();
+                mt = new MyTaskGetAllNotes();
+                mt.execute();
                 return true;
             case R.id.exitToAppMenuItem_ID:
                 SharedPreferences mySPrefs = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = mySPrefs.edit();
                 editor.remove("login");
                 editor.remove("password");
+                editor.remove("checkInternet");
                 editor.apply();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -392,7 +389,7 @@ public class MyNotes extends AppCompatActivity {
 
     public void synchronizationlocaldb() {
 
-          Cursor key = database.rawQuery("SELECT * from " + DBHelper.TABLE_NAME + " where "+DBHelper._STATUS + " = 'NoAdd' ;", null);
+        Cursor key = database.rawQuery("SELECT * from " + DBHelper.TABLE_NAME + " where " + DBHelper._STATUS + " = 'NoAdd' ;", null);
         if (key.moveToFirst()) {
             do {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -401,7 +398,7 @@ public class MyNotes extends AppCompatActivity {
                     //input your API parameters
                     object.put("login", login);
                     object.put("theme", key.getString(1));
-                    object.put("message",key.getString(2));
+                    object.put("message", key.getString(2));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -419,7 +416,7 @@ public class MyNotes extends AppCompatActivity {
                                     createdAt = response.getString("createdAt");
                                     theme = response.getString("theme");
                                     message = response.getString("message");
-                                    notes.add(0, new Note(theme,message,id,updatedAt,createdAt));
+                                    notes.add(0, new Note(theme, message, id, updatedAt, createdAt));
                                     adapter.notifyDataSetChanged();
 
                                     cv.put("status", "Add");
@@ -443,7 +440,6 @@ public class MyNotes extends AppCompatActivity {
             while (key.moveToNext());
             key.close();
         }
-
     }
 
     void addNote() {

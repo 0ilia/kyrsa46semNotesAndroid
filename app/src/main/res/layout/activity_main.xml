@@ -48,14 +48,14 @@
             android:text="Зарегистрироваться"
             android:textAllCaps="false"
         />
-   <!-- <Button
+    <Button
         android:onClick="gotoOffline_avtivityClick_auth"
         android:id="@+id/offlineButtonId_auth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Автономный режим работы"
         android:textAllCaps="false"
-        />-->
+        />
     <LinearLayout
 
         android:layout_width="wrap_content"
