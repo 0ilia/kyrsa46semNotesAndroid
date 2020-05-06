@@ -42,6 +42,27 @@ import static com.android.volley.Request.Method.GET;
 
 public class MyNotesOffline extends AppCompatActivity {
 
+    class MyTaskGetAllNotesOffline extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            Cursor key = database.rawQuery("SELECT * from " + DBHelper.TABLE_NAME + " order by " + DBHelper._UNIX_TIMECreate + " desc ;", null);
+            //   String keyValue = "";
+            if (key.moveToFirst()) {
+                do {
+                    Log.e("key.getString(0)", String.valueOf(key.getInt(0)));
+                    // keyValue = key.getString(0);
+                    // break;
+                    notes.add(new Note(key.getString(1), key.getString(1), key.getInt(0), key.getString(4), key.getString(3)));
+                    adapter.notifyDataSetChanged();
+                }
+                while (key.moveToNext());
+                key.close();
+            }
+            return null;
+        }
+    }
+
+    MyTaskGetAllNotesOffline mt;
 
     String theme, message, login, updatedAt, createdAt;
     int id;
@@ -53,22 +74,6 @@ public class MyNotesOffline extends AppCompatActivity {
     SQLiteDatabase database;
     DBHelper dbHelper = new DBHelper(this);
 
-    public void getAllNotes(){
-        Cursor key = database.rawQuery("SELECT * from " + DBHelper.TABLE_NAME + " order by "+DBHelper._UNIX_TIMECreate+" desc ;", null);
-     //   String keyValue = "";
-        if (key.moveToFirst()) {
-            do {
-                Log.e("key.getString(0)", String.valueOf(key.getInt(0)));
-               // keyValue = key.getString(0);
-               // break;
-                notes.add(new Note(key.getString(1), key.getString(1), key.getInt(0), key.getString(4), key.getString(3)));
-                adapter.notifyDataSetChanged();
-            }
-            while (key.moveToNext());
-            key.close();
-        }
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +91,8 @@ public class MyNotesOffline extends AppCompatActivity {
 
         database = dbHelper.getWritableDatabase();
         //Get All Notes Local db
-        getAllNotes();
+        mt = new MyTaskGetAllNotesOffline();
+        mt.execute();
 
         search = findViewById(R.id.edittextSearchIdOffline);
 
