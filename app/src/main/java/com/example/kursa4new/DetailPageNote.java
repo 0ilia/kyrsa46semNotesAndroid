@@ -82,59 +82,63 @@ public class DetailPageNote extends AppCompatActivity {
         //id = Integer.parseInt(idString);
         themeEditText.setText(theme);
         messageEditText.setText(message);
-        oldTheme = theme;
-        oldMessage = message;
+        oldTheme = themeEditText.getText().toString();
+        oldMessage = messageEditText.getText().toString();
     }
 
     @Override
     public void onBackPressed() {
         //  super.onBackPressed();
-        backPage();
+        saveNotes();
     }
 
 
     public void saveNotes() {
 //crate Note
         if (id == -1) {
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            JSONObject object = new JSONObject();
-            try {
-                //input your API parameters
-                object.put("login", login);
-                object.put("theme", themeEditText.getText().toString());
-                object.put("message", messageEditText.getText().toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            // Enter the correct url for your api service site
-            String url = getString(R.string.URL) + "/addNote/";
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-
-                            Log.e("SSSSS", response.toString());
-                            try {
-                                id = response.getInt("id");
-                                updatedAt = response.getString("updatedAt");
-                                createdAt = response.getString("createdAt");
-                                theme = response.getString("theme");
-                                message = response.getString("message");
-                                function = "create";
-                                resMess.setText(response.getString("create"));
-                                backPage();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
+            if (!oldTheme.equals(themeEditText.getText().toString()) || !oldMessage.equals(messageEditText.getText().toString())) {
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                JSONObject object = new JSONObject();
+                try {
+                    //input your API parameters
+                    object.put("login", login);
+                    object.put("theme", themeEditText.getText().toString());
+                    object.put("message", messageEditText.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-            requestQueue.add(jsonObjectRequest);
+                // Enter the correct url for your api service site
+                String url = getString(R.string.URL) + "/addNote/";
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(POST, url, object,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                Log.e("SSSSS", response.toString());
+                                try {
+                                    id = response.getInt("id");
+                                    updatedAt = response.getString("updatedAt");
+                                    createdAt = response.getString("createdAt");
+                                    theme = response.getString("theme");
+                                    message = response.getString("message");
+                                    function = "create";
+                                    resMess.setText(response.getString("create"));
+                                    backPage();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                });
+                requestQueue.add(jsonObjectRequest);
+            }else {
+                backPage();
+            }
         }
         //update
         else {
@@ -162,7 +166,7 @@ public class DetailPageNote extends AppCompatActivity {
                                     Log.e("CCCC", updatedAt);
                                     function = "update";
                                     resMess.setText(response.getString("update"));
-
+                                    backPage();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -176,6 +180,8 @@ public class DetailPageNote extends AppCompatActivity {
                 });
                 requestQueue.add(jsonObjectRequest);
 
+            }else {
+                backPage();
             }
         }
     }
@@ -240,12 +246,10 @@ public class DetailPageNote extends AppCompatActivity {
         int idMenu = item.getItemId();
         switch (idMenu) {
             case R.id.back_in_allNotes_id:
-                backPage();
+                saveNotes();
                 //    super.onBackPresed();
                 return true;
-            case R.id.saveNoteMenuId:
-                saveNotes();
-                return true;
+
             case R.id.deleteNoteMenuId:
                 deleteNotes();
                 return true;

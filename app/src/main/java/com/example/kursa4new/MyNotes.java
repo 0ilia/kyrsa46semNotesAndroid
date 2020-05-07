@@ -145,6 +145,8 @@ public class MyNotes extends AppCompatActivity {
 
                 notes.add(0, new Note(theme, message, id, updatedAt, createdAt));
                 adapter.notifyDataSetChanged();
+            }else {
+                Log.e("Error_onActivityResult", "e.getMessage()");
             }
         } catch (Exception e) {
             Log.e("Error_onActivityResult", e.getMessage());
