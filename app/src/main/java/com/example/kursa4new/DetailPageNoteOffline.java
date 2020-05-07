@@ -38,6 +38,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
     ContentValues cv = new ContentValues();
     SQLiteDatabase database;
     DBHelper dbHelper = new DBHelper(this);
+    String oldTheme , oldMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,9 @@ public class DetailPageNoteOffline extends AppCompatActivity {
 
         themeEditText.setText(theme);
         messageEditText.setText(message);
+
+        oldTheme = themeEditText.getText().toString();
+        oldMessage = messageEditText.getText().toString();
     }
 
     @Override
@@ -101,11 +105,9 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         int idMenu = item.getItemId();
         switch (idMenu) {
             case R.id.back_in_allNotes_id:
-                backPage();
-                return true;
-            case R.id.saveNoteMenuId:
                 saveNotes();
                 return true;
+
             case R.id.deleteNoteMenuId:
                 deleteNotes();
                 return true;
@@ -148,7 +150,9 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         }
         //update
         else {
-            if (!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals("")) {
+            if ((!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals(""))&&
+                    (!oldTheme.equals(themeEditText.getText().toString())|| !oldMessage.equals(messageEditText.getText().toString()))
+            ) {
 
                 cv.put("theme", themeEditText.getText().toString());
                 cv.put("message", messageEditText.getText().toString());
@@ -160,6 +164,9 @@ public class DetailPageNoteOffline extends AppCompatActivity {
                 function = "update";
                 theme = themeEditText.getText().toString();
                 message = messageEditText.getText().toString();
+                backPage();
+            }else {
+                backPage();
             }
         }
     }
@@ -185,6 +192,8 @@ public class DetailPageNoteOffline extends AppCompatActivity {
             message = messageEditText.getText().toString();
             function = "create";
 
+            backPage();
+        }else {
             backPage();
         }
     }
