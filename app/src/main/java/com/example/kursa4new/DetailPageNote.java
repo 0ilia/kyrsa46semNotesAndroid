@@ -53,6 +53,7 @@ public class DetailPageNote extends AppCompatActivity {
     TextView resMess;
 
     Calendar dateAndTime = Calendar.getInstance();
+    String oldTheme, oldMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,8 @@ public class DetailPageNote extends AppCompatActivity {
         //id = Integer.parseInt(idString);
         themeEditText.setText(theme);
         messageEditText.setText(message);
+        oldTheme = theme;
+        oldMessage = message;
     }
 
     @Override
@@ -135,44 +138,45 @@ public class DetailPageNote extends AppCompatActivity {
         }
         //update
         else {
-
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            JSONObject object = new JSONObject();
-            try {
-                //input your API parameters
-                object.put("theme", themeEditText.getText().toString());
-                object.put("message", messageEditText.getText().toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            // Enter the correct url for your api service site
-            String url = getString(R.string.URL) + "/updateNote/" + id;
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(PUT, url, object,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                theme = themeEditText.getText().toString();
-                                message = messageEditText.getText().toString();
-
-                                updatedAt = response.getString("updatedAt");
-                                Log.e("CCCC", updatedAt);
-                                function = "update";
-                                resMess.setText(response.getString("update"));
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+            if (!oldTheme.equals(themeEditText.getText().toString()) || !oldMessage.equals(messageEditText.getText().toString())) {
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                JSONObject object = new JSONObject();
+                try {
+                    //input your API parameters
+                    object.put("theme", themeEditText.getText().toString());
+                    object.put("message", messageEditText.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                // Enter the correct url for your api service site
+                String url = getString(R.string.URL) + "/updateNote/" + id;
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(PUT, url, object,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    theme = themeEditText.getText().toString();
+                                    message = messageEditText.getText().toString();
 
-            });
-            requestQueue.add(jsonObjectRequest);
+                                    updatedAt = response.getString("updatedAt");
+                                    Log.e("CCCC", updatedAt);
+                                    function = "update";
+                                    resMess.setText(response.getString("update"));
 
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+
+                });
+                requestQueue.add(jsonObjectRequest);
+
+            }
         }
     }
 
@@ -266,7 +270,7 @@ public class DetailPageNote extends AppCompatActivity {
                 .setSmallIcon(R.drawable.notificationnote)
                 .setContentTitle(themeEditText.getText().toString())
                 .setContentText(messageEditText.getText().toString())
-              /*  .setContentIntent(resultPendingIntent)*/
+                /*  .setContentIntent(resultPendingIntent)*/
                 .setColor(R.color.red)
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(messageEditText.getText().toString()))
