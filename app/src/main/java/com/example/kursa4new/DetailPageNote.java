@@ -122,7 +122,7 @@ public class DetailPageNote extends AppCompatActivity {
                                     theme = response.getString("theme");
                                     message = response.getString("message");
                                     function = "create";
-                                    resMess.setText(response.getString("create"));
+                                  //  resMess.setText(response.getString("create"));
                                     backPage();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -165,7 +165,7 @@ public class DetailPageNote extends AppCompatActivity {
                                     updatedAt = response.getString("updatedAt");
                                     Log.e("CCCC", updatedAt);
                                     function = "update";
-                                    resMess.setText(response.getString("update"));
+                                  //  resMess.setText(response.getString("update"));
                                     backPage();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -262,9 +262,10 @@ public class DetailPageNote extends AppCompatActivity {
 
 
     public void createNotification() {
-   /*     Intent resultIntent = new Intent(this, MainActivity.class);
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);*/
+
+
+
+
 
         Log.e("DDDD", String.valueOf(dateAndTime.getTimeInMillis()));
         Log.e("DDDD1", String.valueOf(System.currentTimeMillis()));
