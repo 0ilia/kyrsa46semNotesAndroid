@@ -5,7 +5,6 @@ import androidx.core.app.NotificationCompat;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
@@ -21,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -52,7 +52,6 @@ public class DetailPageNote extends AppCompatActivity {
     EditText themeEditText, messageEditText;
     TextView resMess;
 
-    Calendar dateAndTime = Calendar.getInstance();
     String oldTheme, oldMessage;
 
     @Override
@@ -64,6 +63,8 @@ public class DetailPageNote extends AppCompatActivity {
 
         resMess = findViewById(R.id.resultMessageForDetailPage);
         Intent intent = getIntent();
+
+
 
         theme = intent.getStringExtra("theme");
         message = intent.getStringExtra("message");
@@ -84,6 +85,10 @@ public class DetailPageNote extends AppCompatActivity {
         messageEditText.setText(message);
         oldTheme = themeEditText.getText().toString();
         oldMessage = messageEditText.getText().toString();
+
+
+
+
     }
 
     @Override
@@ -142,6 +147,9 @@ public class DetailPageNote extends AppCompatActivity {
         }
         //update
         else {
+            if(themeEditText.getText().toString().equals("")&& messageEditText.getText().toString().equals("")){
+                deleteNotes();
+            }
             if (!oldTheme.equals(themeEditText.getText().toString()) || !oldMessage.equals(messageEditText.getText().toString())) {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 JSONObject object = new JSONObject();
@@ -266,16 +274,21 @@ public class DetailPageNote extends AppCompatActivity {
 
 
 
+        Intent intent = new Intent(this, Notification_withDetailPage.class);
+        intent.putExtra("id", id);
+        intent.putExtra("theme", themeEditText.getText().toString());
+        intent.putExtra("message", messageEditText.getText().toString());
+        startActivity(intent);
 
-        Log.e("DDDD", String.valueOf(dateAndTime.getTimeInMillis()));
-        Log.e("DDDD1", String.valueOf(System.currentTimeMillis()));
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setWhen(/*dateAndTime.getTimeInMillis()*/System.currentTimeMillis())
+
+
+      /*  NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setWhen(*//*dateAndTime.getTimeInMillis()*//*System.currentTimeMillis())
                 .setTicker(themeEditText.getText().toString())
                 .setSmallIcon(R.drawable.notificationnote)
                 .setContentTitle(themeEditText.getText().toString())
                 .setContentText(messageEditText.getText().toString())
-                /*  .setContentIntent(resultPendingIntent)*/
+                *//*  .setContentIntent(resultPendingIntent)*//*
                 .setColor(R.color.red)
                 .setAutoCancel(true)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(messageEditText.getText().toString()))
@@ -285,7 +298,7 @@ public class DetailPageNote extends AppCompatActivity {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         notificationManager.notify(id, notification);
-
+*/
     }
 
 

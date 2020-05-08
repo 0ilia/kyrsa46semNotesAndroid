@@ -12,15 +12,19 @@
         android:label="Заметки"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents.DayNight">
-        <activity android:name=".DetailPageNoteOffline"
+        android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+        <activity
+            android:name=".Notification_withDetailPage"
             android:screenOrientation="portrait"
-             android:windowSoftInputMode="adjustResize|stateHidden"
-            />
-        <activity android:name=".MyNotesOffline"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".DetailPageNoteOffline"
             android:screenOrientation="portrait"
-             android:windowSoftInputMode="adjustResize|stateHidden"
-            />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".MyNotesOffline"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".DetailPageNote"
             android:screenOrientation="portrait"
@@ -32,16 +36,22 @@
         <activity
             android:name=".ActivityRegisterForm"
             android:screenOrientation="portrait"
-             android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".Notification"
+            android:enabled="true"
+            android:exported="false"></receiver>
     </application>
 
 </manifest>

@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:hint="Текст"
         android:inputType="textMultiLine"
-android:maxLines="7"
+android:maxLines="13"
         android:maxLength="224"
         />
 
@@ -78,4 +78,6 @@ android:maxLines="7"
         android:textAllCaps="false"
         android:onClick="createNotification"
         />-->
+
+
 </LinearLayout>
