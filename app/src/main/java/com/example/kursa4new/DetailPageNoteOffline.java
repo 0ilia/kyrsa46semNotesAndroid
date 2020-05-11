@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -221,8 +222,22 @@ public class DetailPageNoteOffline extends AppCompatActivity {
 
     public void createNotification() {
 
+
+        if (!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals("")) {
+            Intent intent = new Intent(this, Notification_withDetailPage.class);
+            intent.putExtra("id", id);
+            intent.putExtra("theme", themeEditText.getText().toString());
+            intent.putExtra("message", messageEditText.getText().toString());
+            startActivity(intent);
+        }else   {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Заполните заметку", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+        /*
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setWhen(/*dateAndTime.getTimeInMillis()*/System.currentTimeMillis())
+                .setWhen(*//*dateAndTime.getTimeInMillis()*//*System.currentTimeMillis())
                 .setTicker(themeEditText.getText().toString())
                 .setSmallIcon(R.drawable.notificationnote)
                 .setContentTitle(themeEditText.getText().toString())
@@ -235,7 +250,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         Notification notification = builder.build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        notificationManager.notify(id, notification);
+        notificationManager.notify(id, notification);*/
 
     }
 

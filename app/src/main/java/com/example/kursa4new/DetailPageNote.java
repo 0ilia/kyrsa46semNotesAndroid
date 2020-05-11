@@ -25,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.android.volley.RequestQueue;
@@ -69,7 +70,7 @@ public class DetailPageNote extends AppCompatActivity {
         theme = intent.getStringExtra("theme");
         message = intent.getStringExtra("message");
         login = intent.getStringExtra("login");
-        setTitle(login);
+        setTitle(theme);
         //    updatedAt = intent.getStringExtra("updatedAt");
         updatedAt = "";
         createdAt = intent.getStringExtra("createdAt");
@@ -212,6 +213,9 @@ public class DetailPageNote extends AppCompatActivity {
                 }
             });
             requestQueue.add(jsonObjectRequest);
+        }else{
+            openPageAllNote();
+
         }
     }
 
@@ -274,12 +278,17 @@ public class DetailPageNote extends AppCompatActivity {
 
 
 
-        Intent intent = new Intent(this, Notification_withDetailPage.class);
-        intent.putExtra("id", id);
-        intent.putExtra("theme", themeEditText.getText().toString());
-        intent.putExtra("message", messageEditText.getText().toString());
-        startActivity(intent);
-
+        if (!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals("")) {
+            Intent intent = new Intent(this, Notification_withDetailPage.class);
+            intent.putExtra("id", id);
+            intent.putExtra("theme", themeEditText.getText().toString());
+            intent.putExtra("message", messageEditText.getText().toString());
+            startActivity(intent);
+        }else   {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Заполните заметку", Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
 
       /*  NotificationCompat.Builder builder = new NotificationCompat.Builder(this)

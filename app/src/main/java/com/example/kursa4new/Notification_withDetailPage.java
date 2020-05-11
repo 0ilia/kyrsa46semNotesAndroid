@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -27,6 +28,7 @@ public class Notification_withDetailPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_with_detail_page);
 
+        setTitle("Уведомление");
 
         Intent intent = getIntent();
 
@@ -77,6 +79,12 @@ public class Notification_withDetailPage extends AppCompatActivity {
         PendingIntent p1=PendingIntent.getBroadcast(getApplicationContext(),id, intent,0);
         AlarmManager a=(AlarmManager)getSystemService(ALARM_SERVICE);
         a.set(AlarmManager.RTC,calendar.getTimeInMillis(),p1);
+
+
+        Toast toast = Toast.makeText(getApplicationContext(),
+                "Уведомление создано", Toast.LENGTH_SHORT);
+        toast.show();
+
 
         super.onBackPressed();
 
