@@ -8,8 +8,11 @@ import android.app.DatePickerDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -55,10 +58,16 @@ public class DetailPageNote extends AppCompatActivity {
 
     String oldTheme, oldMessage;
 
+
+    ContentValues cv = new ContentValues();
+    SQLiteDatabase database;
+    DBHelper dbHelper = new DBHelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_page_note);
+        database = dbHelper.getWritableDatabase();
+
         themeEditText = findViewById(R.id.theme_Note_EditText_ID);
         messageEditText = findViewById(R.id.message_Note_EditText_ID);
 
@@ -103,6 +112,17 @@ public class DetailPageNote extends AppCompatActivity {
 //crate Note
         if (id == -1) {
             if (!oldTheme.equals(themeEditText.getText().toString()) || !oldMessage.equals(messageEditText.getText().toString())) {
+
+                cv.put(DBHelper._THEME, themeEditText.getText().toString());
+                cv.put(DBHelper._MESSAGE, messageEditText.getText().toString());
+                cv.put(DBHelper._UNIX_TIMECreate, System.currentTimeMillis());
+                cv.put(DBHelper._UNIX_TIMEUpdate, System.currentTimeMillis());
+                cv.put(DBHelper._STATUS, "Add");
+                database.insert(DBHelper.TABLE_NAME, null, cv);
+                database.close();
+
+
+
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 JSONObject object = new JSONObject();
                 try {
@@ -152,6 +172,9 @@ public class DetailPageNote extends AppCompatActivity {
                 deleteNotes();
             }
             if (!oldTheme.equals(themeEditText.getText().toString()) || !oldMessage.equals(messageEditText.getText().toString())) {
+
+
+
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 JSONObject object = new JSONObject();
                 try {
@@ -197,6 +220,9 @@ public class DetailPageNote extends AppCompatActivity {
 
     public void deleteNotes() {
         if (id != -1) {
+
+
+
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             JSONObject object = new JSONObject();
             String url = getString(R.string.URL) + "/deleteNote/" + id;
