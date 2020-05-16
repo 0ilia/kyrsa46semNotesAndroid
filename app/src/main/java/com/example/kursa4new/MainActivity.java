@@ -45,37 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-       if (!preferences.getString("login", "").equals("") &&
-                !preferences.getString("password", "").equals("")) {
-            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-            JSONObject object = new JSONObject();
-            String url = getString(R.string.URL) + "/loginUser/" + preferences.getString("login", "") + "/" + preferences.getString("password", "");
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, object,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                messageError = response.getString("messageError");
-                                register = response.getBoolean("register");
-                                errorMessage.setText(messageError);
-
-                                openMyNotes(register, preferences.getString("login", ""), (preferences.getString("password", "")));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            });
-            requestQueue.add(jsonObjectRequest);
-
-        }
-
-
 
 
         errorMessage = findViewById(R.id.errorMessageLoginForm);
@@ -85,19 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-   /* @Override
-    protected void onResume() {
-        super.onResume();
 
-        if(!preferences.getString("login", "").equals("") &&
-                !preferences.getString("password", "").equals("")){
-
-            Intent intent = new Intent(this, MyNotes.class);
-            intent.putExtra("login", preferences.getString("login", ""));
-            startActivity(intent);
-
-        }
-    }*/
 
     public void loginButtonClick_auth(View view) {
 

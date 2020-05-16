@@ -1,5 +1,6 @@
 package com.example.kursa4new;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -233,6 +235,9 @@ public class MyNotes extends AppCompatActivity {
 
         database = dbHelper.getWritableDatabase();
         //load preferences
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NOTIFICATION_POLICY}, 1002);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE}, 10222);
+
 
         //SharedPreferences  sPref = getPreferences(MODE_PRIVATE);
        /* SharedPreferences sPref = getSharedPreferences("com.example.kursa4new", Context.MODE_PRIVATE);
