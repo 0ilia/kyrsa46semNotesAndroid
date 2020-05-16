@@ -52,7 +52,7 @@ public class MyNotesOffline extends AppCompatActivity {
                     Log.e("key.getString(0)", String.valueOf(key.getInt(0)));
                     // keyValue = key.getString(0);
                     // break;
-                    notes.add(new Note(key.getString(1), key.getString(1), key.getInt(0), key.getString(4), key.getString(3)));
+                    notes.add(new Note(key.getString(1), key.getString(2), key.getInt(0), key.getString(4), key.getString(3)));
                     adapter.notifyDataSetChanged();
                 }
                 while (key.moveToNext());

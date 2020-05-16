@@ -38,17 +38,14 @@ public class MainActivity extends AppCompatActivity {
     String messageError = "";
     boolean register = false;
     SharedPreferences preferences;
-    Button offlineButtonPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        offlineButtonPage = findViewById(R.id.offlineButtonId_auth);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (preferences.getString("checkInternet", "").equals("false")) {
-            offlineButtonPage.performClick();
-        } else if (!preferences.getString("login", "").equals("") &&
+       if (!preferences.getString("login", "").equals("") &&
                 !preferences.getString("password", "").equals("")) {
             RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             JSONObject object = new JSONObject();
@@ -77,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
             requestQueue.add(jsonObjectRequest);
 
         }
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+
 
 
 
@@ -169,12 +165,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
+
 
 
     @Override

@@ -126,6 +126,9 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         if (id == -1) {
             creatNote();
         }else {
+            if(themeEditText.getText().toString().equals("") && messageEditText.getText().toString().equals("")){
+                deleteNotes();
+            }
             if (!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals("")) {
 
                 cv.put("theme", themeEditText.getText().toString());
@@ -139,6 +142,7 @@ public class DetailPageNoteOffline extends AppCompatActivity {
                 function = "update";
                 theme = themeEditText.getText().toString();
                 message = messageEditText.getText().toString();
+                backPage();
             }
         }
 
@@ -151,6 +155,9 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         }
         //update
         else {
+            if(themeEditText.getText().toString().equals("")&& messageEditText.getText().toString().equals("")){
+                deleteNotes();
+            }
             if ((!themeEditText.getText().toString().equals("") || !messageEditText.getText().toString().equals(""))&&
                     (!oldTheme.equals(themeEditText.getText().toString())|| !oldMessage.equals(messageEditText.getText().toString()))
             ) {
@@ -203,6 +210,8 @@ public class DetailPageNoteOffline extends AppCompatActivity {
         if (id != -1) {
             database.delete(DBHelper.TABLE_NAME, DBHelper._ID + "  = '" + id + "'", null);
             function = "delete";
+            openPageAllNote();
+        }else{
             openPageAllNote();
         }
     }
